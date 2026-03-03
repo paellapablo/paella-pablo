@@ -1103,62 +1103,14 @@
     </footer>
 
     <script>
+        /************************************************************
+         * CONFIG
+         ************************************************************/
+        const FORM_ENDPOINT = "https://formspree.io/f/mbdavvor"; // <-- METS TON LIEN FORMSPREE ICI
 
-        function openCtaOverlay() {
-            const overlay = document.getElementById("ctaOverlay");
-            if (!overlay) return;
-            overlay.classList.add("active");
-            document.body.style.overflow = "hidden";
-        }
-
-        function closeCtaOverlay() {
-            const overlay = document.getElementById("ctaOverlay");
-            if (!overlay) return;
-            overlay.classList.remove("active");
-            document.body.style.overflow = "";
-        }
-
-        // Clique en dehors = ferme
-        document.addEventListener("click", (e) => {
-            const overlay = document.getElementById("ctaOverlay");
-            if (!overlay || !overlay.classList.contains("active")) return;
-            if (e.target === overlay) closeCtaOverlay();
-        });
-
-        // Échap = ferme
-        document.addEventListener("keydown", (e) => {
-            const overlay = document.getElementById("ctaOverlay");
-            if (!overlay) return;
-            if (e.key === "Escape" && overlay.classList.contains("active")) closeCtaOverlay();
-        });
-
-        function goToEstablishment(id) {
-            closeCtaOverlay();
-
-            const card = document.getElementById(`card-${id}`);
-
-            // fallback si jamais l'id n'existe pas
-            if (!card) {
-                scrollToSection("activites");
-                setTimeout(() => handleActivityClick(id), 450);
-                return;
-            }
-
-            // offset pour le header fixe (ajuste si tu veux)
-            const offset = 120;
-
-            const top = card.getBoundingClientRect().top + window.pageYOffset - offset;
-
-            window.scrollTo({
-                top,
-                behavior: "smooth"
-            });
-
-            // Ouvre la popup après le scroll
-            setTimeout(() => {
-                handleActivityClick(id);
-            }, 500);
-        }
+        /************************************************************
+         * DATA
+         ************************************************************/
         const establishments = [
             {
                 id: 1,
@@ -1167,7 +1119,7 @@
                 address: "Marchés de Lunel, Mauguio, Sommières, Montpellier",
                 hours: "Selon les marchés",
                 phone: "06 13 23 70 82",
-                menuUrl: "carte/pp-carte.html"
+                menuUrl: "carte/pp-carte.html",
             },
             {
                 id: 2,
@@ -1176,7 +1128,7 @@
                 address: "Centre-ville",
                 hours: "Midi & soir",
                 phone: "06 66 21 79 30",
-                menuUrl: "carte/carte.html"
+                menuUrl: "carte/carte.html",
             },
             {
                 id: 3,
@@ -1184,329 +1136,429 @@
                 location: "Lunel-Viel",
                 address: "Centre du village",
                 hours: "Midi & soir",
-                phone: " 06 27 42 30 27",
-                menuUrl: "carte/carte2.html"
-            }
+                phone: "06 27 42 30 27",
+                menuUrl: "carte/carte2.html",
+            },
         ];
 
-        window.addEventListener("scroll", () => {
-            const header = document.getElementById("main-header");
+        /************************************************************
+         * HELPERS
+         ************************************************************/
+        function qs(sel, root = document) {
+            return root.querySelector(sel);
+        }
+        function qsa(sel, root = document) {
+            return Array.from(root.querySelectorAll(sel));
+        }
+        function safeAdd(el, event, fn) {
+            if (el) el.addEventListener(event, fn);
+        }
+
+        /************************************************************
+         * UI: HEADER SCROLL (transparent -> solid)
+         ************************************************************/
+        function initHeaderScroll() {
+            const header = qs("#main-header");
             if (!header) return;
 
-            if (window.scrollY > 80) {
-                header.classList.add("header-solid");
-                header.classList.remove("header-transparent");
-            } else {
-                header.classList.add("header-transparent");
-                header.classList.remove("header-solid");
-            }
-        });
+            const onScroll = () => {
+                if (window.scrollY > 80) {
+                    header.classList.add("header-solid");
+                    header.classList.remove("header-transparent");
+                } else {
+                    header.classList.add("header-transparent");
+                    header.classList.remove("header-solid");
+                }
+            };
 
+            window.addEventListener("scroll", onScroll, { passive: true });
+            onScroll(); // état initial
+        }
+
+        /************************************************************
+         * UI: MOBILE MENU
+         ************************************************************/
         function toggleMobileMenu() {
-            const menu = document.getElementById("mobile-menu");
-            const header = document.getElementById("main-header");
+            const menu = qs("#mobile-menu");
+            const header = qs("#main-header");
+            if (!menu) return;
 
             menu.classList.toggle("hidden");
 
-            if (!menu.classList.contains("hidden")) {
-                document.body.style.overflow = "hidden";
-                header.style.pointerEvents = "none";
-            } else {
-                document.body.style.overflow = "";
-                header.style.pointerEvents = "";
-            }
+            const open = !menu.classList.contains("hidden");
+            document.body.style.overflow = open ? "hidden" : "";
+            if (header) header.style.pointerEvents = open ? "none" : "";
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const menuBtn = document.getElementById("mobile-menu-btn");
-            if (menuBtn) {
-                menuBtn.addEventListener("click", toggleMobileMenu);
-            }
-        });
+        function initMobileMenu() {
+            const btn = qs("#mobile-menu-btn");
+            safeAdd(btn, "click", toggleMobileMenu);
+            // bouton "x" dans ton HTML appelle déjà toggleMobileMenu()
+            window.toggleMobileMenu = toggleMobileMenu;
+        }
 
+        /************************************************************
+         * UI: SCROLL TO SECTION
+         ************************************************************/
         function scrollToSection(id) {
             const section = document.getElementById(id);
-            if (section) {
-                section.scrollIntoView({ behavior: "smooth" });
+            if (section) section.scrollIntoView({ behavior: "smooth" });
+        }
+        window.scrollToSection = scrollToSection;
+
+        /************************************************************
+         * UI: CTA OVERLAY (CHOIX ÉTABLISSEMENT)
+         ************************************************************/
+        function openCtaOverlay() {
+            const overlay = qs("#ctaOverlay");
+            if (!overlay) return;
+            overlay.classList.add("active");
+            document.body.style.overflow = "hidden";
+        }
+        function closeCtaOverlay() {
+            const overlay = qs("#ctaOverlay");
+            if (!overlay) return;
+            overlay.classList.remove("active");
+            document.body.style.overflow = "";
+        }
+        window.openCtaOverlay = openCtaOverlay;
+        window.closeCtaOverlay = closeCtaOverlay;
+
+        function goToEstablishment(id) {
+            closeCtaOverlay();
+
+            // Optionnel : si tu veux scroller vers la carte, ajoute id="card-1" etc sur tes 3 cards
+            const card = document.getElementById(`card-${id}`);
+            if (card) {
+                const offset = 120;
+                const top = card.getBoundingClientRect().top + window.pageYOffset - offset;
+                window.scrollTo({ top, behavior: "smooth" });
+
+                setTimeout(() => handleActivityClick(id), 500);
+            } else {
+                // fallback
+                scrollToSection("activites");
+                setTimeout(() => handleActivityClick(id), 450);
             }
         }
+        window.goToEstablishment = goToEstablishment;
 
+        function initCtaOverlayCloseBehaviors() {
+            // clic en dehors
+            document.addEventListener("click", (e) => {
+                const overlay = qs("#ctaOverlay");
+                if (!overlay || !overlay.classList.contains("active")) return;
+                if (e.target === overlay) closeCtaOverlay();
+            });
+
+            // Echap
+            document.addEventListener("keydown", (e) => {
+                const overlay = qs("#ctaOverlay");
+                if (!overlay) return;
+                if (e.key === "Escape" && overlay.classList.contains("active")) closeCtaOverlay();
+            });
+        }
+
+        /************************************************************
+         * UI: ACTIVITY MODAL
+         ************************************************************/
         function handleActivityClick(id) {
-            const e = establishments.find(item => item.id === id);
+            const e = establishments.find((x) => x.id === id);
             if (!e) return;
 
-            const modal = document.getElementById("activityModal");
-            const content = document.getElementById("modalContent");
+            const modal = qs("#activityModal");
+            const content = qs("#modalContent");
             if (!modal || !content) return;
 
             content.innerHTML = `
-    <div class="flex items-center mb-4">
-      <div class="w-12 h-12 bg-orange-dore rounded-full flex items-center justify-center mr-4">
-        <span class="text-noir font-serif font-bold text-lg">
-          ${e.name.charAt(0)}
-        </span>
+      <div class="flex items-center mb-4">
+        <div class="w-12 h-12 bg-orange-dore rounded-full flex items-center justify-center mr-4">
+          <span class="text-noir font-serif font-bold text-lg">${e.name.charAt(0)}</span>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-serif text-brun">${e.name}</h3>
+          <p class="text-orange-dore font-medium">${e.location}</p>
+        </div>
       </div>
 
-      <div>
-        <h3 class="text-xl font-serif text-brun">${e.name}</h3>
-        <p class="text-orange-dore font-medium">${e.location}</p>
-      </div>
-    </div>
+      <div class="space-y-2 text-brun-clair mb-6">
+        <p>
+          📍
+          <a
+            href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}"
+            target="_blank"
+            rel="noopener"
+            class="text-orange-dore font-medium hover:underline"
+          >
+            ${e.address}
+          </a>
+        </p>
 
-    <div class="space-y-2 text-brun-clair mb-6">
-      <p>
-        📍 
-        <a 
-          href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}"
-          target="_blank"
-          rel="noopener"
-          class="text-orange-dore font-medium hover:underline"
+        <p>🕒 ${e.hours}</p>
+
+        <p>
+          📞
+          <a href="tel:${e.phone.replace(/\s+/g, "")}" class="text-orange-dore font-medium hover:underline">
+            ${e.phone}
+          </a>
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-3">
+        <button
+          onclick="openReservationFor(${e.id})"
+          class="w-full bg-brun text-creme py-3 rounded-lg font-medium hover:bg-brun-clair transition"
         >
-          ${e.address}
+          ${e.id === 1 ? "Service traiteur" : "Réserver"}
+        </button>
+
+        <a
+          href="${e.menuUrl}"
+          target="_blank"
+          class="w-full text-center border-2 border-brun text-brun py-3 rounded-lg font-medium hover:bg-brun hover:text-creme transition"
+        >
+          Voir le menu
         </a>
-      </p>
-
-      <p>🕒 ${e.hours}</p>
-      <p>
-        📞 
-        <a href="tel:${e.phone.replace(/\s+/g, '')}" 
-           class="text-orange-dore font-medium hover:underline">
-          ${e.phone}
-        </a>
-      </p>
-    </div>
-
-    <div class="flex flex-col gap-3">
-      <button
-  onclick="openReservationFor(${e.id})"
-  class="w-full bg-brun text-creme py-3 rounded-lg font-medium hover:bg-brun-clair transition">
-  ${e.id === 1 ? "Service traiteur" : "Réserver"}
-</button>
-
-      <a
-        href="${e.menuUrl}"
-        target="_blank"
-        class="w-full text-center border-2 border-brun text-brun py-3 rounded-lg font-medium hover:bg-brun hover:text-creme transition">
-        Voir le menu
-      </a>
-    </div>
-  `;
+      </div>
+    `;
 
             modal.classList.remove("hidden");
         }
+        window.handleActivityClick = handleActivityClick;
 
         function closeActivityModal() {
-            const modal = document.getElementById("activityModal");
+            const modal = qs("#activityModal");
             if (modal) modal.classList.add("hidden");
         }
+        window.closeActivityModal = closeActivityModal;
 
-        document.addEventListener("click", (e) => {
-            const modal = document.getElementById("activityModal");
-            if (!modal) return;
+        function initActivityModalCloseBehaviors() {
+            // clic sur fond
+            document.addEventListener("click", (e) => {
+                const modal = qs("#activityModal");
+                if (!modal) return;
+                if (!modal.classList.contains("hidden") && e.target === modal) closeActivityModal();
+            });
 
-            if (e.target === modal) {
-                closeActivityModal();
-            }
-        });
+            // Echap
+            document.addEventListener("keydown", (e) => {
+                const modal = qs("#activityModal");
+                if (!modal) return;
+                if (e.key === "Escape" && !modal.classList.contains("hidden")) closeActivityModal();
+            });
+        }
 
-        function handleContact(id) {
+        /************************************************************
+         * RESERVATION (FORM + FORMSPREE)
+         ************************************************************/
+        function openReservationFor(id) {
+            const e = establishments.find((x) => x.id === id);
+            if (!e) return;
 
-            // 🔥 UNIQUEMENT pour Paëlla Pablo (id = 1)
-            if (id === 1) {
-                closeActivityModal();
-                scrollToSection('traiteur');
+            closeActivityModal();
+            handleReservation(e.name);
+        }
+        window.openReservationFor = openReservationFor;
+
+        function closeReservationModal() {
+            const modal = document.getElementById("reservationModal");
+            if (modal) modal.remove();
+            document.body.style.overflow = ""; // au cas où
+        }
+        window.closeReservationModal = closeReservationModal;
+
+        function handleReservation(establishmentName = "") {
+            // sécurité si endpoint pas configuré
+            if (!FORM_ENDPOINT || FORM_ENDPOINT.includes("XXXXYYYY")) {
+                alert("⚠️ Tu dois d’abord mettre ton lien Formspree dans FORM_ENDPOINT.");
                 return;
             }
 
-            // ✅ Pour les autres établissements → mail normal
-            const e = establishments.find(item => item.id === id);
-            if (!e) return;
+            document.body.style.overflow = "hidden";
 
-            const subject = encodeURIComponent(`Contact - ${e.name}`);
-            const body = encodeURIComponent(
-                `Bonjour,\n\nJe souhaite vous contacter concernant ${e.name}.\n\nMerci.`
-            );
-
-            window.location.href =
-                `mailto:contact@artisanat-culinaire.fr?subject=${subject}&body=${body}`;
-        }
-        function openReservationFor(id) {
-            const e = establishments.find(item => item.id === id);
-            if (!e) return;
-
-            closeActivityModal();               // ferme la pop-up établissement
-            handleReservation(e.name);          // ouvre le formulaire avec le nom
-        }
-
-        function handleReservation(establishmentName = "") {
             const modalHtml = `
-    <div class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center px-4">
-      <div class="bg-white rounded-2xl max-w-md w-full p-6 relative">
-        <button onclick="closeReservationModal()"
-          class="absolute top-4 right-4 text-xl text-brun hover:text-orange-dore">
-          &times;
-        </button>
+      <div class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center px-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 relative">
+          <button onclick="closeReservationModal()"
+            class="absolute top-4 right-4 text-xl text-brun hover:text-orange-dore">
+            &times;
+          </button>
 
-        <h3 class="text-2xl font-serif text-brun mb-2">
-  Réserver un événement
-</h3>
-<p class="text-sm text-brun/70 mb-4">
-  ${establishmentName ? `Établissement : <strong>${establishmentName}</strong>` : ""}
-</p>
+          <h3 class="text-2xl font-serif text-brun mb-2">Réserver un événement</h3>
 
-        <form id="reservationForm" class="space-y-4">
+          <p class="text-sm text-brun/70 mb-4">
+            ${establishmentName ? `Établissement : <strong>${establishmentName}</strong>` : ""}
+          </p>
 
-  <!-- Nom -->
-  <input
-    required
-    type="text"
-    placeholder="Nom complet"
-    class="w-full p-3 border rounded-lg"
-  >
+          <form id="reservationForm" class="space-y-4">
+            <input required name="nom" type="text" placeholder="Nom complet" class="w-full p-3 border rounded-lg">
 
-  <!-- Email -->
-  <input
-    required
-    type="email"
-    placeholder="Email"
-    class="w-full p-3 border rounded-lg"
-  >
+            <input required name="email" type="email" placeholder="Email" class="w-full p-3 border rounded-lg">
 
-  <!-- Date avec calendrier -->
-  <!-- Date -->
-<div class="relative">
-  <span
-    class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-  >
-    Date
-  </span>
+            <input required name="date" type="date" class="w-full p-3 border rounded-lg bg-white">
 
-  <input
-    required
-    type="date"
-    class="w-full p-3 border rounded-lg bg-white"
-    onfocus="this.previousElementSibling.style.display='none'"
-    onblur="if(!this.value) this.previousElementSibling.style.display='block'"
-    onchange="this.previousElementSibling.style.display='none'"
-  />
-</div>
+            <input required name="tel" type="tel" placeholder="Téléphone" pattern="[0-9]{10}" inputmode="numeric"
+              class="w-full p-3 border rounded-lg">
 
+            <textarea required name="demande" placeholder="Votre demande" class="w-full p-3 border rounded-lg"></textarea>
 
- 
+            <input type="hidden" name="etablissement" value="${establishmentName || "Paëlla Pablo"}">
 
-  <!-- Téléphone (chiffres uniquement) -->
-  <input
-    required
-    type="tel"
-    placeholder="Téléphone"
-    pattern="[0-9]{10}"
-    inputmode="numeric"
-    class="w-full p-3 border rounded-lg"
-  >
+            <button type="submit"
+              class="w-full bg-orange-dore text-noir py-3 rounded-lg font-medium hover:bg-orange-pale transition">
+              Envoyer
+            </button>
 
-  <!-- Demande -->
-  <textarea
-    required
-    placeholder="Votre demande"
-    class="w-full p-3 border rounded-lg"
-  ></textarea>
+            <p id="reservationSuccess" class="hidden text-center font-medium" style="color:#16a34a;">
+              ✅ Demande envoyée ! On vous recontacte très vite.
+            </p>
 
-  <button
-    type="submit"
-    class="w-full bg-orange-dore text-noir py-3 rounded-lg font-medium hover:bg-orange-pale"
-  >
-    Envoyer
-  </button>
-
-</form>
-
+            <p id="reservationError" class="hidden text-center font-medium" style="color:#dc2626;">
+              ❌ Une erreur est survenue. Réessayez.
+            </p>
+          </form>
+        </div>
       </div>
-    </div>
-  `;
+    `;
 
             const wrapper = document.createElement("div");
             wrapper.id = "reservationModal";
             wrapper.innerHTML = modalHtml;
             document.body.appendChild(wrapper);
 
-            document
-                .getElementById("reservationForm")
-                .addEventListener("submit", (e) => {
-                    document
-                        .getElementById("reservationForm")
-                        .addEventListener("submit", (ev) => {
-                            ev.preventDefault();
+            const form = document.getElementById("reservationForm");
+            const successMsg = document.getElementById("reservationSuccess");
+            const errorMsg = document.getElementById("reservationError");
+            const submitBtn = form.querySelector('button[type="submit"]');
 
-                            const form = ev.target;
-                            const values = Array.from(form.querySelectorAll("input, textarea")).map(el => el.value);
-
-                            const [nom, email, date, tel, demande] = values;
-
-                            const subject = encodeURIComponent(
-                                `Réservation - ${establishmentName || "Paëlla Pablo"}`
-                            );
-
-                            const body = encodeURIComponent(
-                                `Bonjour,\n\n` +
-                                `Établissement : ${establishmentName || "Paëlla Pablo"}\n` +
-                                `Nom : ${nom}\n` +
-                                `Email : ${email}\n` +
-                                `Date : ${date}\n` +
-
-                                `Téléphone : ${tel}\n\n` +
-                                `Demande :\n${demande}\n`
-                            );
-
-                            window.location.href =
-                                `mailto:contact@artisanat-culinaire.fr?subject=${subject}&body=${body}`;
-
-                            closeReservationModal();
-                        });
-                });
-        }
-
-        function closeReservationModal() {
-            const modal = document.getElementById("reservationModal");
-            if (modal) modal.remove();
-        }
-
-        const observer = new IntersectionObserver(
-            entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("animate-fade-in");
-                    }
-                });
-            },
-            { threshold: 0.1 }
-        );
-
-        document.querySelectorAll("section").forEach(section => {
-            observer.observe(section);
-        });
-
-        console.log("✅ Script chargé correctement");
-    </script>
-
-    <script>
-        const slider = document.querySelector('.image-slider');
-
-        if (slider) {
-            let isTouching = false;
-
-            slider.addEventListener('touchstart', () => {
-                isTouching = true;
-                slider.style.animationPlayState = 'paused';
+            // fermer si clic dehors
+            wrapper.addEventListener("click", (e) => {
+                if (e.target === wrapper.firstElementChild) closeReservationModal();
             });
 
-            slider.addEventListener('touchend', () => {
+            // Echap
+            const onEsc = (e) => {
+                if (e.key === "Escape") {
+                    closeReservationModal();
+                    document.removeEventListener("keydown", onEsc);
+                }
+            };
+            document.addEventListener("keydown", onEsc);
+
+            form.addEventListener("submit", async (ev) => {
+                ev.preventDefault();
+
+                successMsg.classList.add("hidden");
+                errorMsg.classList.add("hidden");
+
+                submitBtn.disabled = true;
+                const oldText = submitBtn.textContent;
+                submitBtn.textContent = "Envoi...";
+
+                try {
+                    const formData = new FormData(form);
+
+                    const res = await fetch(FORM_ENDPOINT, {
+                        method: "POST",
+                        body: formData,
+                        headers: { Accept: "application/json" },
+                    });
+
+                    if (res.ok) {
+                        form.reset();
+                        successMsg.classList.remove("hidden");
+                        setTimeout(() => closeReservationModal(), 1800);
+                    } else {
+                        errorMsg.classList.remove("hidden");
+                    }
+                } catch (err) {
+                    errorMsg.classList.remove("hidden");
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = oldText;
+                }
+            });
+        }
+        window.handleReservation = handleReservation;
+
+        /************************************************************
+         * CONTACT OVERLAY (WhatsApp / téléphone)
+         ************************************************************/
+        function initContactOverlay() {
+            const contactOverlay = qs("#contactOverlay");
+            const closeBtn = qs(".close-contact");
+
+            // ouvre si clic sur .contact-trigger
+            document.addEventListener("click", (e) => {
+                const trigger = e.target.closest(".contact-trigger");
+                if (!trigger) return;
+
+                e.preventDefault();
+                if (!contactOverlay) return;
+                contactOverlay.classList.add("active");
+                document.body.style.overflow = "hidden";
+            });
+
+            // fermer bouton
+            safeAdd(closeBtn, "click", () => {
+                if (!contactOverlay) return;
+                contactOverlay.classList.remove("active");
+                document.body.style.overflow = "";
+            });
+
+            // fermer clic dehors
+            safeAdd(contactOverlay, "click", (e) => {
+                if (e.target === contactOverlay) {
+                    contactOverlay.classList.remove("active");
+                    document.body.style.overflow = "";
+                }
+            });
+
+            // Echap
+            document.addEventListener("keydown", (e) => {
+                if (!contactOverlay) return;
+                if (e.key === "Escape" && contactOverlay.classList.contains("active")) {
+                    contactOverlay.classList.remove("active");
+                    document.body.style.overflow = "";
+                }
+            });
+        }
+
+        /************************************************************
+         * GALERIE SLIDER (pause au touch)
+         ************************************************************/
+        function initSliderTouchPause() {
+            const slider = qs(".image-slider");
+            if (!slider) return;
+
+            let isTouching = false;
+
+            slider.addEventListener("touchstart", () => {
+                isTouching = true;
+                slider.style.animationPlayState = "paused";
+            });
+
+            slider.addEventListener("touchend", () => {
                 setTimeout(() => {
                     if (!isTouching) return;
-                    slider.style.animationPlayState = 'running';
+                    slider.style.animationPlayState = "running";
                     isTouching = false;
                 }, 1500);
             });
         }
+
+        /************************************************************
+         * INIT
+         ************************************************************/
+        document.addEventListener("DOMContentLoaded", () => {
+            initHeaderScroll();
+            initMobileMenu();
+            initCtaOverlayCloseBehaviors();
+            initActivityModalCloseBehaviors();
+            initContactOverlay();
+            initSliderTouchPause();
+        });
     </script>
 
     <!-- POPUP ACTIVITÉ -->
