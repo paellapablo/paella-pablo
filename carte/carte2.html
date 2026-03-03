@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Carte – Rôtisserie de Sasha</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="stylecarte.css">
+</head>
+
+<body class="bg-sasha">
+
+  <a href="../index.html" class="back-home">
+    ← Retour au site
+  </a>
+
+
+
+  <main class="wrapper">
+
+    <h2 class="title">Notre carte</h2>
+
+    <!-- ONGLET MENU -->
+    <div class="buttons-container">
+      <button class="button button--is-active" data-target="menuRotisserie">Rôtisserie</button>
+      <button class="button" data-target="menuTraiteur">Traiteur</button>
+      <button class="button" data-target="menuAccompagnements">Accompagnements</button>
+
+
+      <span class="highlight"></span>
+    </div>
+
+    <!-- ROTISSERIE -->
+    <section class="menu menu--is-visible" id="menuRotisserie">
+      <div class="item">
+        <div class="item__header"><span>Poulet de la ferme</span><span class="dots"></span><span>19,90 €/kg</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Coquelet</span><span class="dots"></span><span>8,50 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Ribs</span><span class="dots"></span><span>27 €/kg</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Jambonette</span><span class="dots"></span><span>13,90 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Jambonneau</span><span class="dots"></span><span>12 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Fondant</span><span class="dots"></span><span>4,50 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Souris</span><span class="dots"></span><span>16,50 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Chorizo</span><span class="dots"></span><span>2 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Lomo</span><span class="dots"></span><span>3 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Pintade de ferme <em>(sur commande)</em></span><span
+            class="dots"></span><span>19,90 €/kg</span></div>
+      </div>
+    </section>
+
+    <!-- TRAITEUR -->
+    <section class="menu" id="menuTraiteur">
+      <div class="item">
+        <div class="item__header"><span>Paella</span><span class="dots"></span><span>11,50 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Fideua</span><span class="dots"></span><span>11,50 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Rouille de seiche</span><span class="dots"></span><span>11,50 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Poulet forestier <em>(sur commande)</em></span><span
+            class="dots"></span><span>11,50 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Chili con carne <em>(sur commande)</em></span><span
+            class="dots"></span><span>11,50 €</span></div>
+      </div>
+
+      <div class="item">
+        <div class="item__header"><span>Couscous 1 viande <em>(sur commande)</em></span><span
+            class="dots"></span><span>13
+            €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Couscous 2 viandes<em>(sur commande)</em></span><span
+            class="dots"></span><span>15
+            €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Gardianne de taureau <em>(sur commande)</em></span><span
+            class="dots"></span><span>11,50 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Poulet basquaise <em>(sur commande)</em></span><span
+            class="dots"></span><span>11,50 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Chou farci <em>(sur commande)</em></span><span class="dots"></span><span>10
+            €</span></div>
+      </div>
+    </section>
+
+    <!-- ACCOMPAGNEMENTS -->
+    <section class="menu" id="menuAccompagnements">
+      <div class="item">
+        <div class="item__header"><span>Frites maison</span><span class="dots"></span><span>4 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Pommes de terre gourmandes</span><span class="dots"></span><span>4 €</span>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Épi de maïs</span><span class="dots"></span><span>2,50 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Légumes</span><span class="dots"></span><span>4 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Gratin au choix</span><span class="dots"></span><span>6 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Soufflé emmental</span><span class="dots"></span><span>2,60 €</span></div>
+      </div>
+      <div class="item">
+        <div class="item__header"><span>Galette de pomme de terre</span><span class="dots"></span><span>2,60 €</span>
+        </div>
+      </div>
+    </section>
+
+
+
+  </main>
+
+  <!-- JS INCLUS -->
+  <script>
+    const buttons = document.querySelectorAll('.button');
+    const menus = document.querySelectorAll('.menu');
+    const container = document.querySelector('.buttons-container');
+    const highlight = document.querySelector('.highlight');
+
+    function moveHighlight(btn) {
+      const b = btn.getBoundingClientRect();
+      const c = container.getBoundingClientRect();
+      highlight.style.width = b.width + 'px';
+      highlight.style.height = b.height + 'px';
+      highlight.style.transform = `translateX(${b.left - c.left}px)`;
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('button--is-active'));
+        btn.classList.add('button--is-active');
+
+        menus.forEach(m => m.classList.remove('menu--is-visible'));
+        document.getElementById(btn.dataset.target).classList.add('menu--is-visible');
+
+        moveHighlight(btn);
+      });
+    });
+
+    window.addEventListener('load', () => {
+      moveHighlight(document.querySelector('.button--is-active'));
+    });
+
+    window.addEventListener('resize', () => {
+      moveHighlight(document.querySelector('.button--is-active'));
+    });
+  </script>
+
+</body>
+
+</html>

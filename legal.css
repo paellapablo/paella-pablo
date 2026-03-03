@@ -1,0 +1,122 @@
+/* =========================
+   RESET & BASE
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 80px 20px;
+    font-family: 'Inter', sans-serif;
+    background: #F5F1E6;
+    color: #3C2A1E;
+}
+
+/* =========================
+     CARTE CENTRALE
+  ========================= */
+
+.legal-container {
+    max-width: 880px;
+    margin: auto;
+    background: #ffffff;
+    padding: 70px 70px;
+    border-radius: 22px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12);
+}
+
+/* =========================
+     TITRE PRINCIPAL
+  ========================= */
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 70px;
+    position: relative;
+}
+
+h1::after {
+    content: "";
+    width: 80px;
+    height: 3px;
+    background: #C0392B;
+    display: block;
+    margin: 20px auto 0;
+    border-radius: 2px;
+}
+
+/* =========================
+     SECTIONS
+  ========================= */
+
+section {
+    margin-bottom: 50px;
+}
+
+h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    color: #C0392B;
+    margin-bottom: 18px;
+    padding-left: 14px;
+    border-left: 4px solid #C0392B;
+}
+
+/* =========================
+     TEXTE
+  ========================= */
+
+p {
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 10px;
+}
+
+strong {
+    font-weight: 600;
+}
+
+/* =========================
+     LISTES
+  ========================= */
+
+ul {
+    margin: 12px 0 0 20px;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+/* =========================
+     LIENS
+  ========================= */
+
+a {
+    color: #C0392B;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+     RESPONSIVE
+  ========================= */
+
+@media (max-width: 768px) {
+    .legal-container {
+        padding: 40px 30px;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+        margin-bottom: 50px;
+    }
+}

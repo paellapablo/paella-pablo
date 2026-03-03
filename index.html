@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
+
+
+    <title>Paëlla Pablo | Traiteur et marchés</title>
+    <meta name="description"
+        content="Découvrez l'excellence culinaire du sud de la France avec Paëlla Pablo, Rôtisserie de Sasha et Pouletterie de Rachel.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind config (JS UNIQUEMENT) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        noir: '#0A0A0A',
+                        brun: '#3C2A1E',
+                        creme: '#F5F1E6',
+                        'orange-dore': '#C0392B',
+                        'orange-pale': '#F2B4A8'
+                    },
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'serif'],
+                        sans: ['Inter', 'sans-serif']
+                    }
+
+
+                }
+            }
+        }
+
+        // Overlay Contact
+        const contactOverlay = document.getElementById('contactOverlay');
+        const closeContact = document.querySelector('.close-contact');
+
+        // Écoute clic "Contacter" (ajoutez class="contact-trigger" au bouton externe si besoin)
+        document.addEventListener('click', (e) => {
+            if (e.target.matches('.contact-trigger') || e.target.closest('.contact-trigger')) {
+                e.preventDefault();
+                contactOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+
+        closeContact.addEventListener('click', () => {
+            contactOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        contactOverlay.addEventListener('click', (e) => {
+            if (e.target === contactOverlay) {
+                contactOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Échap
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && contactOverlay.classList.contains('active')) {
+                contactOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+    </script>
+
+    <style>
+        /* Ajustement logo + titre en mobile */
+        @media (max-width: 480px) {
+            .header-title {
+                font-size: 1.25rem;
+                /* ← baisse ici si besoin */
+                letter-spacing: 0.08em;
+                /* ← moins espacé */
+            }
+        }
+
+        /* OVERLAY CONTACT */
+        .overlay-contact {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: none;
+        }
+
+        .overlay-contact.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .contact-modal {
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--gold);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            max-width: 420px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-glow), var(--shadow-soft);
+            text-align: center;
+            transform: scale(0.8) translateY(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .overlay-contact.active .contact-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .contact-title {
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .contact-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .btn-contact {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 16px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-contact::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.2));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn-contact:hover::before,
+        .btn-contact:focus::before {
+            opacity: 1;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            border-color: #25D366;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-phone {
+            background: var(--gold);
+            color: #000;
+            border-color: var(--gold);
+            box-shadow: 0 8px 25px rgba(245, 196, 0, 0.4);
+        }
+
+        .btn-contact:hover,
+        .btn-contact:focus {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .close-contact {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--gold);
+            font-size: 2rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-contact:hover {
+            background: rgba(245, 196, 0, 0.2);
+            transform: rotate(90deg);
+        }
+
+        /* Mobile */
+        @media (max-width: 480px) {
+            .contact-modal {
+                padding: 2.5rem 1.75rem;
+                margin: 1rem;
+            }
+
+            .contact-buttons {
+                gap: 1rem;
+            }
+
+            .btn-contact {
+                padding: 1.125rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+
+        /* Titre du bloc événements */
+        #traiteur h2 {
+            font-family: 'Playfair Display', serif !important;
+        }
+
+        /* Texte du bloc (paragraphe + items) */
+        #traiteur p,
+        #traiteur h4,
+        #traiteur li,
+        #traiteur span {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        }
+
+        /* ==== CORRECTIONS MOBILE ==== */
+        @media (max-width: 480px) {
+            h2 {
+                font-size: 1.7rem;
+                line-height: 1.3;
+            }
+
+            .hero-text {
+                font-size: 1rem;
+                line-height: 1.6;
+            }
+
+            .cta-button {
+                width: 100%;
+                border-radius: 999px;
+                margin-top: 2rem;
+            }
+
+            .feature-item {
+                margin-bottom: 1.75rem;
+                padding: 1rem 0;
+            }
+
+            .feature-item-icon {
+                margin-right: 0.9rem;
+            }
+
+            .section-evenements {
+                max-width: 360px;
+                margin: 0 auto;
+                padding: 1.5rem 1.25rem;
+            }
+        }
+
+        #mobile-menu {
+            top: 0;
+        }
+
+        .header-solid {
+            z-index: 40;
+        }
+
+        /* ==== BASE ==== */
+        body {
+            overflow-x: hidden;
+        }
+
+        /* ==== HERO ==== */
+        .parallax-container {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .parallax-container .container {
+                padding-bottom: 120px;
+            }
+
+            .parallax-container .max-w-2xl {
+                margin-bottom: 120px;
+            }
+        }
+
+        .parallax-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: none;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .parallax-container {
+                min-height: 85vh;
+            }
+
+            .parallax-image {
+                height: 100%;
+                animation: none;
+            }
+        }
+
+        /* ==== HEADER ==== */
+        .header-transparent {
+            background: transparent;
+            transition: .4s;
+        }
+
+        .header-solid {
+            background: rgba(10, 10, 10, .95);
+            backdrop-filter: blur(10px);
+        }
+
+        /* ==== CARDS ==== */
+        .card-hover {
+            transition: transform .4s ease, box-shadow .4s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, .15);
+        }
+
+        /* ==== GALERIE ==== */
+        .image-slider {
+            display: flex;
+            width: max-content;
+            animation: slide 30s linear infinite;
+        }
+
+        @keyframes slide {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .image-slider:hover {
+            animation-play-state: paused;
+        }
+
+        @media (max-width: 768px) {
+            #galerie .h-96 {
+                height: 260px;
+            }
+
+            .image-slider img {
+                width: 220px;
+                height: 260px;
+            }
+        }
+
+        .bg-gradient-overlay {
+            background: linear-gradient(to right,
+                    rgba(0, 0, 0, 0.55) 0%,
+                    rgba(0, 0, 0, 0.35) 40%,
+                    rgba(0, 0, 0, 0.1) 70%,
+                    rgba(0, 0, 0, 0) 100%);
+        }
+
+        /* ===== HERO TYPO ===== */
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.8rem, 6vw, 4.6rem);
+            font-weight: 600;
+            color: #F5F1E6;
+            line-height: 1;
+            letter-spacing: 0.04em;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+        }
+
+        .hero-title span {
+            color: #C0392B;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+            font-weight: 500;
+            color: #F5F1E6;
+            line-height: 1.6;
+            max-width: 520px;
+            letter-spacing: 0.02em;
+            text-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+        }
+
+
+
+        /* ===== CTA ===== */
+        .hero-cta {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            max-width: 360px;
+        }
+
+        .btn-primary {
+            background: #C0392B;
+            color: #0A0A0A;
+            padding: 0.9rem 1.6rem;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all .3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #F2B4A8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            border: 1.5px solid rgba(245, 241, 230, 0.8);
+            color: #F5F1E6;
+            padding: 0.85rem 1.6rem;
+            border-radius: 999px;
+            font-weight: 500;
+            background: transparent;
+            transition: all .3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(245, 241, 230, 0.08);
+        }
+
+        /* ===== GRADIENT BAS UNIQUEMENT ===== */
+        .bg-gradient-overlay {
+            background: linear-gradient(to top,
+                    rgba(0, 0, 0, 0.55) 0%,
+                    rgba(0, 0, 0, 0.25) 35%,
+                    rgba(0, 0, 0, 0) 65%);
+
+        }
+
+        /* ===== HERO TYPO ===== */
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.8rem, 6vw, 4.6rem);
+            font-weight: 600;
+            color: #F5F1E6;
+            line-height: 1;
+            letter-spacing: 0.04em;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+        }
+
+        .hero-title span {
+            color: #C0392B;
+        }
+
+
+        /* ===== CTA ===== */
+        .hero-cta {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            max-width: 360px;
+        }
+
+        .btn-primary {
+            background: #C0392B;
+            color: #0A0A0A;
+            padding: 0.9rem 1.6rem;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all .3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #F2B4A8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            border: 1.5px solid rgba(245, 241, 230, 0.8);
+            color: #F5F1E6;
+            padding: 0.85rem 1.6rem;
+            border-radius: 999px;
+            font-weight: 500;
+            background: transparent;
+            transition: all .3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(245, 241, 230, 0.08);
+        }
+
+        /* ===== GRADIENT BAS UNIQUEMENT ===== */
+        .bg-gradient-overlay {
+            background: linear-gradient(to top,
+                    rgba(0, 0, 0, 0.55) 0%,
+                    rgba(0, 0, 0, 0.25) 35%,
+                    rgba(0, 0, 0, 0) 65%);
+        }
+
+        /* ===== HEADER BRAND ===== */
+        /* ===== HEADER BRAND FINAL ===== */
+        .header-title {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            font-size: 2.4rem;
+            color: #F5F1E6;
+            line-height: 1;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+
+
+        .header-title strong {
+            color: #C0392B;
+            font-weight: 800;
+        }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 1.8rem;
+                /* PLUS GROS en mobile */
+                letter-spacing: 0.1em;
+            }
+        }
+
+
+
+        .header-title strong {
+            color: #C0392B;
+            font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            .header-title {
+                font-size: 1.35rem;
+            }
+        }
+
+
+
+        .header-title strong {
+            color: #C0392B;
+            font-weight: 900;
+        }
+
+        /* TABLET + MOBILE */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2rem;
+                letter-spacing: 0.12em;
+            }
+        }
+
+        /* PETIT MOBILE */
+        @media (max-width: 480px) {
+            .header-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* ===== SCROLL INDICATOR ===== */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            cursor: pointer;
+            animation: scroll-bounce 2s infinite;
+        }
+
+        .scroll-arrow {
+            width: 36px;
+            height: 36px;
+            color: #F5F1E6;
+            opacity: 0.85;
+            filter: drop-shadow(0 6px 15px rgba(0, 0, 0, 0.6));
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .scroll-indicator:hover .scroll-arrow {
+            opacity: 1;
+            transform: scale(1.15);
+        }
+
+        @keyframes scroll-bounce {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(10px);
+            }
+        }
+
+        /* ===== HERO CTA POSITION ===== */
+        .hero-cta {
+            margin-top: 4rem;
+            /* DESCEND les boutons */
+        }
+
+        input[type="date"] {
+            background-color: white;
+            color: #3C2A1E;
+            -webkit-text-fill-color: #3C2A1E;
+        }
+
+        /* FIX FINAL — taille du titre en mobile */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 1.45rem !important;
+                letter-spacing: 0.08em !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-title {
+                font-size: 1.25rem !important;
+                letter-spacing: 0.07em !important;
+            }
+        }
+
+        /* ===== OVERLAY CTA (CHOIX) ===== */
+        .cta-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .78);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .cta-overlay.active {
+            display: flex;
+        }
+
+        .cta-modal {
+            width: 100%;
+            max-width: 520px;
+            background: rgba(10, 10, 10, .95);
+            border: 1px solid rgba(245, 241, 230, .18);
+            border-radius: 22px;
+            padding: 22px 18px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .45);
+            position: relative;
+            transform: translateY(10px) scale(.98);
+            transition: .25s ease;
+        }
+
+        .cta-overlay.active .cta-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .cta-close {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            border: 0;
+            background: rgba(245, 241, 230, .08);
+            color: #F5F1E6;
+            font-size: 28px;
+            line-height: 1;
+        }
+
+        .cta-title {
+            color: #F5F1E6;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+
+        .cta-subtitle {
+            color: rgba(245, 241, 230, .75);
+            font-size: .95rem;
+            margin-bottom: 16px;
+        }
+
+        .cta-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .cta-choice {
+            width: 100%;
+            text-align: left;
+            padding: 14px 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(245, 241, 230, .16);
+            background: rgba(245, 241, 230, .06);
+            color: #F5F1E6;
+            font-weight: 600;
+            transition: .2s ease;
+        }
+
+        .cta-choice:hover {
+            transform: translateY(-2px);
+            background: rgba(242, 180, 168, .18);
+            border-color: rgba(242, 180, 168, .35);
+        }
+
+        /* ===== SLOGAN HERO ===== */
+        /* ===== SLOGAN HERO PREMIUM ===== */
+
+        .hero-slogan-inline {
+            margin-top: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: clamp(1rem, 2.4vw, 1.25rem);
+            color: rgba(245, 241, 230, 0.88);
+            letter-spacing: 0.02em;
+            text-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+        }
+
+        .hero-slogan-inline span {
+            color: #F2B4A8;
+            /* plus doux que le rouge */
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+
+
+<body class="min-h-screen bg-creme text-brun font-sans">
+    <!-- Header -->
+    <header id="main-header" class="header-transparent fixed w-full z-50 py-4">
+        <div class="container mx-auto px-4">
+            <nav class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img src="photos/poulet.PNG" alt="Logo Paella Pablo" class="w-14 h-14 rounded-full object-cover" />
+
+                    <span class="header-title">
+                        Paella <strong>Pablo</strong>
+                    </span>
+
+
+
+                </div>
+
+
+
+
+
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#activites"
+                        class="text-creme hover:text-orange-dore transition-colors duration-300 font-medium">Nos
+                        Activités</a>
+                    <a href="#galerie"
+                        class="text-creme hover:text-orange-dore transition-colors duration-300 font-medium">Galerie</a>
+                    <a href="#traiteur"
+                        class="text-creme hover:text-orange-dore transition-colors duration-300 font-medium">Événements</a>
+                    <a href="#contact"
+                        class="text-creme hover:text-orange-dore transition-colors duration-300 font-medium">Contact</a>
+
+
+
+
+
+                </div>
+
+                <button id="mobile-menu-btn" class="md:hidden text-creme">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MOBILE MENU FULL SCREEN -->
+    <div id="mobile-menu" class="md:hidden hidden fixed inset-0 z-[9999] bg-noir/95 backdrop-blur-xl">
+        <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 text-creme text-4xl font-light">
+            &times;
+        </button>
+
+        <div class="h-full flex flex-col justify-center items-center space-y-6 text-center px-8">
+            <a href="#activites" onclick="toggleMobileMenu()"
+                class="text-creme text-2xl font-medium hover:text-orange-dore transition">
+                Nos Activités
+            </a>
+
+            <a href="#galerie" onclick="toggleMobileMenu()"
+                class="text-creme text-2xl font-medium hover:text-orange-dore transition">
+                Galerie
+            </a>
+
+            <a href="#traiteur" onclick="toggleMobileMenu()"
+                class="text-creme text-2xl font-medium hover:text-orange-dore transition">
+                Événements
+            </a>
+
+            <a href="#contact" onclick="toggleMobileMenu()"
+                class="text-creme text-2xl font-medium hover:text-orange-dore transition">
+                Contact
+            </a>
+
+
+
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="parallax-container">
+        <img src="photos/rachel.jpeg" alt="Présentation culinaire artisanale du sud de la France" class="parallax-image"
+            loading="lazy">
+
+        <!-- Dégradé bas uniquement -->
+        <div class="absolute inset-0 bg-gradient-overlay"></div>
+
+
+
+
+        <!-- CTA EN BAS -->
+
+
+        <div class="container mx-auto px-6 pb-6 absolute -bottom-6 md:bottom-12 left-0 right-0">
+            <div class="hero-cta">
+
+
+
+
+                <div class="container mx-auto px-6 pb-6 absolute -bottom-6 md:bottom-12 left-0 right-0">
+                    <div class="mx-auto max-w-sm">
+                        <div
+                            class="flex items-center justify-between gap-3 rounded-full bg-noir/35 backdrop-blur-md border border-white/15 px-4 py-3">
+                            <span class="text-creme/90 text-sm whitespace-nowrap">
+                                Devis rapide • 2 min
+                            </span>
+
+                            <button onclick="openCtaOverlay()"
+                                class="rounded-full bg-orange-dore text-noir px-4 py-2 text-sm font-semibold hover:bg-orange-pale transition">
+                                Réserver
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        </div>
+        <!-- SCROLL INDICATOR -->
+        <div class="scroll-indicator" onclick="scrollToSection('activites')" aria-label="Scroll vers le bas">
+            <svg xmlns="http://www.w3.org/2000/svg" class="scroll-arrow" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </div>
+
+
+    </section>
+
+
+    <!-- Activités Section -->
+    <section id="activites" class="py-20 bg-creme">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 animate-slide-up">
+                <h2 class="text-3xl md:text-4xl font-serif text-brun mb-4">Nos activités</h2>
+
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Paëlla Pablo -->
+                <div onclick="handleActivityClick(1)"
+                    class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer group animate-slide-up"
+                    style="animation-delay: 0.1s">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="photos/facade3.png" alt="Paëlla traditionnelle espagnole préparée artisanalement"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            loading="lazy">
+
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-serif text-brun mb-2">Marchés Paëlla Pablo</h3>
+                        <p class="text-brun-clair mb-4">
+                            Paëlla géante cuisinée sur place, pour marchés, événements et soirées privées.
+                        </p>
+                        <div
+                            class="flex items-center text-orange-dore font-medium group-hover:translate-x-2 transition-transform duration-300">
+                            <span>Explorer les menus</span>
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rôtisserie de Sasha -->
+                <div onclick="handleActivityClick(2)"
+                    class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer group animate-slide-up"
+                    style="animation-delay: 0.2s">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="photos/facade2.jpeg" alt="Rôtisserie artisanale avec viandes de qualité"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            loading="lazy">
+
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-serif text-brun mb-2">Rôtisserie de Sasha</h3>
+                        <p class="text-brun-clair mb-4">
+                            La perfection du rôti, lentement tourné au feu de bois pour une saveur unique.
+                        </p>
+                        <div
+                            class="flex items-center text-orange-dore font-medium group-hover:translate-x-2 transition-transform duration-300">
+                            <span>Explorer les menus</span>
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pouletterie de Rachel -->
+                <div onclick="handleActivityClick(3)"
+                    class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer group animate-slide-up"
+                    style="animation-delay: 0.3s">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="photos/pp-facade.jpeg" alt="Poulet fermier préparé avec des herbes de Provence"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            loading="lazy">
+
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-serif text-brun mb-2">Pouletterie de Rachel</h3>
+                        <p class="text-brun-clair mb-4">
+                            L'excellence du poulet fermier, élevé en plein air et préparé avec passion.
+                        </p>
+                        <div
+                            class="flex items-center text-orange-dore font-medium group-hover:translate-x-2 transition-transform duration-300">
+                            <span>Explorer les menus</span>
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Galerie Immersive -->
+    <section id="galerie" class="py-20 bg-noir">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-serif text-creme mb-4">Nos Plats</h2>
+
+            </div>
+
+            <div class="relative h-96 overflow-hidden rounded-2xl">
+                <div class="image-slider">
+                    <div class="flex space-x-4">
+                        <img src="photos/retouche.png" alt="Préparation artisanale de paëlla"
+                            class="w-80 h-96 object-cover rounded-lg" loading="lazy">
+                        <img src="photos/retouche2.jpg" alt="Rôtisserie traditionnelle au feu de bois"
+                            class="w-80 h-96 object-cover rounded-lg" loading="lazy">
+                        <img src="photos/retouche3.jpg" alt="Poulet fermier et herbes de Provence"
+                            class="w-80 h-96 object-cover rounded-lg" loading="lazy">
+                        <img src="photos/retouche4.jpg" alt="Table dressée pour un repas gastronomique"
+                            class="w-80 h-96 object-cover rounded-lg" loading="lazy">
+                        <img src="photos/retouche5.jpg" alt="Produits frais du marché méditerranéen"
+                            class="w-80 h-96 object-cover rounded-lg" loading="lazy">
+                        <img src="photos/retouche6.jpg" alt="Chef artisan au travail"
+                            class="w-80 h-96 object-cover rounded-lg" loading="lazy">
+                    </div>
+                    <div class="flex space-x-4">
+                        <img src="photos/retouche7.jpg" alt="Détail de présentation culinaire"
+                            class="w-80 h-96 object-cover rounded-lg" loading="lazy">
+                        <img src="photos/retouche8.jpg" alt="Ambiance chaleureuse de restaurant"
+                            class="w-80 h-96 object-cover rounded-lg" loading="lazy">
+                        <img src="photos/retouche9.jpg" alt="Vue sur cuisine ouverte"
+                            class="w-80 h-96 object-cover rounded-lg" loading="lazy">
+                        <img src="photos/retouche10.jpg" alt="Desserts artisanaux"
+                            class="w-80 h-96 object-cover rounded-lg" loading="lazy">
+                        <img src="photos/retouche11.jpg" alt="Vin et fromages de la région"
+                            class="w-80 h-96 object-cover rounded-lg" loading="lazy">
+                        <img src="photos/retouche12.jpg" alt="Terrasse ensoleillée"
+                            class="w-80 h-96 object-cover rounded-lg" loading="lazy">
+                    </div>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-r from-noir via-transparent to-noir"></div>
+            </div>
+        </div>
+    </section>
+
+
+    </div>
+    </section>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-noir text-creme py-14">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col items-center mb-10">
+                <img src="photos/poulet.PNG" alt="Paëlla Pablo" class="w-16 h-16 rounded-full mb-3">
+                <p class="text-sm opacity-80 text-center">
+                    Artisanat Culinaire du Sud
+                </p>
+            </div>
+
+            <div class="text-center mb-10">
+                <h4 class="font-serif text-lg mb-4">
+                    Contact
+                </h4>
+
+                <p class="mb-2">
+                    <a href="mailto:contact@artisanat-culinaire.fr" class="hover:text-orange-dore transition">
+                        contact@artisanat-culinaire.fr
+                    </a>
+                </p>
+
+
+
+                <div class="flex justify-center space-x-6 mt-6">
+                    <a href="#" aria-label="Facebook" class="hover:text-orange-dore transition">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                        </svg>
+                    </a>
+
+                    <a href="#" aria-label="Instagram" class="hover:text-orange-dore transition">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.343 3.608 1.318.975.975 1.256 2.242 1.318 3.608.058 1.266.07 1.646.07 4.84s-.012 3.574-.07 4.84c-.062 1.366-.343 2.633-1.318 3.608-.975.975-2.242 1.256-3.608 1.318-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.343-3.608-1.318-.975-.975-1.256-2.242-1.318-3.608-.058-1.266-.07-1.646-.07-4.84s.012-3.574.07-4.84c.062-1.366.343-2.633 1.318-3.608.975-.975 2.242-1.256 3.608-1.318 1.266-.058 1.646-.07 4.85-.07z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="text-center text-sm opacity-70 space-y-2 mb-8">
+                <a href="#traiteur" class="block hover:text-orange-dore transition">
+                    Service Traiteur & Événements
+                </a>
+
+                <a href="mentions-legales.html" class="block hover:text-orange-dore transition">
+                    Mentions légales
+                </a>
+
+                <a href="politique-confidentialite.html" class="block hover:text-orange-dore transition">
+                    Politique de confidentialité
+                </a>
+            </div>
+
+            <div class="border-t border-creme/20 pt-6 text-center text-xs opacity-60">
+                © 2024 Paëlla Pablo — Tous droits réservés
+            </div>
+        </div>
+    </footer>
+
+    <script>
+
+        function openCtaOverlay() {
+            const overlay = document.getElementById("ctaOverlay");
+            if (!overlay) return;
+            overlay.classList.add("active");
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeCtaOverlay() {
+            const overlay = document.getElementById("ctaOverlay");
+            if (!overlay) return;
+            overlay.classList.remove("active");
+            document.body.style.overflow = "";
+        }
+
+        // Clique en dehors = ferme
+        document.addEventListener("click", (e) => {
+            const overlay = document.getElementById("ctaOverlay");
+            if (!overlay || !overlay.classList.contains("active")) return;
+            if (e.target === overlay) closeCtaOverlay();
+        });
+
+        // Échap = ferme
+        document.addEventListener("keydown", (e) => {
+            const overlay = document.getElementById("ctaOverlay");
+            if (!overlay) return;
+            if (e.key === "Escape" && overlay.classList.contains("active")) closeCtaOverlay();
+        });
+
+        function goToEstablishment(id) {
+            closeCtaOverlay();
+
+            const card = document.getElementById(`card-${id}`);
+
+            // fallback si jamais l'id n'existe pas
+            if (!card) {
+                scrollToSection("activites");
+                setTimeout(() => handleActivityClick(id), 450);
+                return;
+            }
+
+            // offset pour le header fixe (ajuste si tu veux)
+            const offset = 120;
+
+            const top = card.getBoundingClientRect().top + window.pageYOffset - offset;
+
+            window.scrollTo({
+                top,
+                behavior: "smooth"
+            });
+
+            // Ouvre la popup après le scroll
+            setTimeout(() => {
+                handleActivityClick(id);
+            }, 500);
+        }
+        const establishments = [
+            {
+                id: 1,
+                name: "Paëlla Pablo",
+                location: "Hérault",
+                address: "Marchés de Lunel, Mauguio, Sommières, Montpellier",
+                hours: "Selon les marchés",
+                phone: "06 13 23 70 82",
+                menuUrl: "carte/pp-carte.html"
+            },
+            {
+                id: 2,
+                name: "Rôtisserie de Sasha",
+                location: "Baillargues",
+                address: "Centre-ville",
+                hours: "Midi & soir",
+                phone: "06 66 21 79 30",
+                menuUrl: "carte/carte.html"
+            },
+            {
+                id: 3,
+                name: "Pouletterie de Rachel",
+                location: "Lunel-Viel",
+                address: "Centre du village",
+                hours: "Midi & soir",
+                phone: " 06 27 42 30 27",
+                menuUrl: "carte/carte2.html"
+            }
+        ];
+
+        window.addEventListener("scroll", () => {
+            const header = document.getElementById("main-header");
+            if (!header) return;
+
+            if (window.scrollY > 80) {
+                header.classList.add("header-solid");
+                header.classList.remove("header-transparent");
+            } else {
+                header.classList.add("header-transparent");
+                header.classList.remove("header-solid");
+            }
+        });
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById("mobile-menu");
+            const header = document.getElementById("main-header");
+
+            menu.classList.toggle("hidden");
+
+            if (!menu.classList.contains("hidden")) {
+                document.body.style.overflow = "hidden";
+                header.style.pointerEvents = "none";
+            } else {
+                document.body.style.overflow = "";
+                header.style.pointerEvents = "";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const menuBtn = document.getElementById("mobile-menu-btn");
+            if (menuBtn) {
+                menuBtn.addEventListener("click", toggleMobileMenu);
+            }
+        });
+
+        function scrollToSection(id) {
+            const section = document.getElementById(id);
+            if (section) {
+                section.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+
+        function handleActivityClick(id) {
+            const e = establishments.find(item => item.id === id);
+            if (!e) return;
+
+            const modal = document.getElementById("activityModal");
+            const content = document.getElementById("modalContent");
+            if (!modal || !content) return;
+
+            content.innerHTML = `
+    <div class="flex items-center mb-4">
+      <div class="w-12 h-12 bg-orange-dore rounded-full flex items-center justify-center mr-4">
+        <span class="text-noir font-serif font-bold text-lg">
+          ${e.name.charAt(0)}
+        </span>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-serif text-brun">${e.name}</h3>
+        <p class="text-orange-dore font-medium">${e.location}</p>
+      </div>
+    </div>
+
+    <div class="space-y-2 text-brun-clair mb-6">
+      <p>
+        📍 
+        <a 
+          href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}"
+          target="_blank"
+          rel="noopener"
+          class="text-orange-dore font-medium hover:underline"
+        >
+          ${e.address}
+        </a>
+      </p>
+
+      <p>🕒 ${e.hours}</p>
+      <p>
+        📞 
+        <a href="tel:${e.phone.replace(/\s+/g, '')}" 
+           class="text-orange-dore font-medium hover:underline">
+          ${e.phone}
+        </a>
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      <button
+  onclick="openReservationFor(${e.id})"
+  class="w-full bg-brun text-creme py-3 rounded-lg font-medium hover:bg-brun-clair transition">
+  ${e.id === 1 ? "Service traiteur" : "Réserver"}
+</button>
+
+      <a
+        href="${e.menuUrl}"
+        target="_blank"
+        class="w-full text-center border-2 border-brun text-brun py-3 rounded-lg font-medium hover:bg-brun hover:text-creme transition">
+        Voir le menu
+      </a>
+    </div>
+  `;
+
+            modal.classList.remove("hidden");
+        }
+
+        function closeActivityModal() {
+            const modal = document.getElementById("activityModal");
+            if (modal) modal.classList.add("hidden");
+        }
+
+        document.addEventListener("click", (e) => {
+            const modal = document.getElementById("activityModal");
+            if (!modal) return;
+
+            if (e.target === modal) {
+                closeActivityModal();
+            }
+        });
+
+        function handleContact(id) {
+
+            // 🔥 UNIQUEMENT pour Paëlla Pablo (id = 1)
+            if (id === 1) {
+                closeActivityModal();
+                scrollToSection('traiteur');
+                return;
+            }
+
+            // ✅ Pour les autres établissements → mail normal
+            const e = establishments.find(item => item.id === id);
+            if (!e) return;
+
+            const subject = encodeURIComponent(`Contact - ${e.name}`);
+            const body = encodeURIComponent(
+                `Bonjour,\n\nJe souhaite vous contacter concernant ${e.name}.\n\nMerci.`
+            );
+
+            window.location.href =
+                `mailto:contact@artisanat-culinaire.fr?subject=${subject}&body=${body}`;
+        }
+        function openReservationFor(id) {
+            const e = establishments.find(item => item.id === id);
+            if (!e) return;
+
+            closeActivityModal();               // ferme la pop-up établissement
+            handleReservation(e.name);          // ouvre le formulaire avec le nom
+        }
+
+        function handleReservation(establishmentName = "") {
+            const modalHtml = `
+    <div class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center px-4">
+      <div class="bg-white rounded-2xl max-w-md w-full p-6 relative">
+        <button onclick="closeReservationModal()"
+          class="absolute top-4 right-4 text-xl text-brun hover:text-orange-dore">
+          &times;
+        </button>
+
+        <h3 class="text-2xl font-serif text-brun mb-2">
+  Réserver un événement
+</h3>
+<p class="text-sm text-brun/70 mb-4">
+  ${establishmentName ? `Établissement : <strong>${establishmentName}</strong>` : ""}
+</p>
+
+        <form id="reservationForm" class="space-y-4">
+
+  <!-- Nom -->
+  <input
+    required
+    type="text"
+    placeholder="Nom complet"
+    class="w-full p-3 border rounded-lg"
+  >
+
+  <!-- Email -->
+  <input
+    required
+    type="email"
+    placeholder="Email"
+    class="w-full p-3 border rounded-lg"
+  >
+
+  <!-- Date avec calendrier -->
+  <!-- Date -->
+<div class="relative">
+  <span
+    class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+  >
+    Date
+  </span>
+
+  <input
+    required
+    type="date"
+    class="w-full p-3 border rounded-lg bg-white"
+    onfocus="this.previousElementSibling.style.display='none'"
+    onblur="if(!this.value) this.previousElementSibling.style.display='block'"
+    onchange="this.previousElementSibling.style.display='none'"
+  />
+</div>
+
+
+ 
+
+  <!-- Téléphone (chiffres uniquement) -->
+  <input
+    required
+    type="tel"
+    placeholder="Téléphone"
+    pattern="[0-9]{10}"
+    inputmode="numeric"
+    class="w-full p-3 border rounded-lg"
+  >
+
+  <!-- Demande -->
+  <textarea
+    required
+    placeholder="Votre demande"
+    class="w-full p-3 border rounded-lg"
+  ></textarea>
+
+  <button
+    type="submit"
+    class="w-full bg-orange-dore text-noir py-3 rounded-lg font-medium hover:bg-orange-pale"
+  >
+    Envoyer
+  </button>
+
+</form>
+
+      </div>
+    </div>
+  `;
+
+            const wrapper = document.createElement("div");
+            wrapper.id = "reservationModal";
+            wrapper.innerHTML = modalHtml;
+            document.body.appendChild(wrapper);
+
+            document
+                .getElementById("reservationForm")
+                .addEventListener("submit", (e) => {
+                    document
+                        .getElementById("reservationForm")
+                        .addEventListener("submit", (ev) => {
+                            ev.preventDefault();
+
+                            const form = ev.target;
+                            const values = Array.from(form.querySelectorAll("input, textarea")).map(el => el.value);
+
+                            const [nom, email, date, tel, demande] = values;
+
+                            const subject = encodeURIComponent(
+                                `Réservation - ${establishmentName || "Paëlla Pablo"}`
+                            );
+
+                            const body = encodeURIComponent(
+                                `Bonjour,\n\n` +
+                                `Établissement : ${establishmentName || "Paëlla Pablo"}\n` +
+                                `Nom : ${nom}\n` +
+                                `Email : ${email}\n` +
+                                `Date : ${date}\n` +
+
+                                `Téléphone : ${tel}\n\n` +
+                                `Demande :\n${demande}\n`
+                            );
+
+                            window.location.href =
+                                `mailto:contact@artisanat-culinaire.fr?subject=${subject}&body=${body}`;
+
+                            closeReservationModal();
+                        });
+                });
+        }
+
+        function closeReservationModal() {
+            const modal = document.getElementById("reservationModal");
+            if (modal) modal.remove();
+        }
+
+        const observer = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("animate-fade-in");
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+
+        document.querySelectorAll("section").forEach(section => {
+            observer.observe(section);
+        });
+
+        console.log("✅ Script chargé correctement");
+    </script>
+
+    <script>
+        const slider = document.querySelector('.image-slider');
+
+        if (slider) {
+            let isTouching = false;
+
+            slider.addEventListener('touchstart', () => {
+                isTouching = true;
+                slider.style.animationPlayState = 'paused';
+            });
+
+            slider.addEventListener('touchend', () => {
+                setTimeout(() => {
+                    if (!isTouching) return;
+                    slider.style.animationPlayState = 'running';
+                    isTouching = false;
+                }, 1500);
+            });
+        }
+    </script>
+
+    <!-- POPUP ACTIVITÉ -->
+    <div id="activityModal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center px-4">
+        <div class="bg-creme rounded-2xl max-w-md w-full p-6 relative">
+            <button onclick="closeActivityModal()"
+                class="absolute top-4 right-4 text-2xl text-brun hover:text-orange-dore">
+                &times;
+            </button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Overlay Contact -->
+    <div class="overlay-contact" id="contactOverlay" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
+        <div class="contact-modal">
+            <button class="close-contact" aria-label="Fermer">×</button>
+            <h2 id="contactTitle" class="contact-title">Contacter cet établissement</h2>
+            <div class="contact-buttons">
+                <a href="https://wa.me/3360000002?text=Bonjour%2C%20je%20viens%20de%20voir%20votre%20carte%20en%20ligne%20!"
+                    class="btn-contact btn-whatsapp" target="_blank" rel="noopener">
+                    📱 WhatsApp (06 00 00 02)
+                </a>
+                <a href="tel:+3360000002" class="btn-contact btn-phone">
+                    ☎️ Appeler (06 00 00 02)
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay CTA (choix établissement) -->
+    <div id="ctaOverlay" class="cta-overlay" role="dialog" aria-modal="true" aria-labelledby="ctaTitle">
+        <div class="cta-modal">
+            <button class="cta-close" onclick="closeCtaOverlay()" aria-label="Fermer">×</button>
+
+            <h2 id="ctaTitle" class="cta-title">Choisir un établissement</h2>
+
+            <div class="cta-grid">
+                <button class="cta-choice" onclick="goToEstablishment(1)">
+                    🥘 Paëlla Pablo <em>(Evenements, aniverssaires ...)</em>
+                </button>
+
+                <button class="cta-choice" onclick="goToEstablishment(2)">
+                    🔥 Rôtisserie de Sasha <em>(Baillargues)</em>
+                </button>
+
+                <button class="cta-choice" onclick="goToEstablishment(3)">
+                    🍗 Pouletterie de Rachel <em>(Lunel-Viel)</em>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
