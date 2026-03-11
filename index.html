@@ -2,6 +2,15 @@
 <html lang="fr">
 
 <head>
+
+
+    <link rel="canonical" href="https://paellapablo.fr/">
+    <meta property="og:title" content="Paëlla Pablo - Traiteur paëlla et événements dans l'Hérault">
+    <meta property="og:description"
+        content="Paëlla géante, rôtisserie et service traiteur pour vos événements dans l'Hérault.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://paellapablo.fr/">
+    <meta property="og:image" content="https://paellapablo.fr/photos/retouche.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap"
@@ -9,9 +18,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
 
 
-    <title>Paëlla Pablo | Traiteur et marchés</title>
+    <title>Paëlla Pablo - Traiteur paëlla, rôtisserie et événements dans l'Hérault</title>
     <meta name="description"
-        content="Découvrez l'excellence culinaire du sud de la France avec Paëlla Pablo, Rôtisserie de Sasha et Pouletterie de Rachel.">
+        content="Paëlla Pablo propose paëlla géante, rôtisserie et service traiteur pour marchés, mariages, anniversaires et événements privés dans l'Hérault, autour de Montpellier, Lunel et Mauguio.">
+    <meta name="keywords"
+        content="traiteur paella, paella geante, traiteur herault, paella montpellier, paella lunel, rôtisserie traiteur, traiteur evenement, traiteur mariage">
+    <meta name="robots" content="index, follow">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -757,7 +769,49 @@
             /* plus doux que le rouge */
             font-weight: 700;
         }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
     </style>
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FoodEstablishment",
+  "name": "Paëlla Pablo",
+  "image": "https://paellapablo.fr/photos/retouche.png",
+  "url": "https://paellapablo.fr/",
+  "telephone": "+33613237082",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Lunel",
+    "addressRegion": "Hérault",
+    "addressCountry": "FR"
+  },
+  "areaServed": [
+    "Montpellier",
+    "Lunel",
+    "Mauguio",
+    "Sommières",
+    "Hérault"
+  ],
+  "servesCuisine": [
+    "Paëlla",
+    "Rôtisserie",
+    "Traiteur"
+  ]
+}
+</script>
+
 </head>
 
 
@@ -844,11 +898,17 @@
 
     <!-- Hero Section -->
     <section class="parallax-container">
-        <img src="photos/rachel.jpeg" alt="Présentation culinaire artisanale du sud de la France" class="parallax-image"
-            loading="lazy">
+        <img src="photos/rachel.jpeg" alt="Présentation culinaire dans l'hérault" class="parallax-image" loading="lazy">
 
         <!-- Dégradé bas uniquement -->
         <div class="absolute inset-0 bg-gradient-overlay"></div>
+
+        <div class="sr-only">
+            <h1>Traiteur paëlla et événements dans l'Hérault</h1>
+            <p>
+                Paëlla géante, rôtisserie et service traiteur pour marchés, anniversaires, mariages et soirées privées.
+            </p>
+        </div>
 
 
 
@@ -943,7 +1003,7 @@
                     <div class="p-6">
                         <h3 class="text-2xl font-serif text-brun mb-2">Rôtisserie de Sasha</h3>
                         <p class="text-brun-clair mb-4">
-                            La perfection du rôti, lentement tourné au feu  pour une saveur unique.
+                            La perfection du rôti, lentement tourné au feu de bois pour une saveur unique.
                         </p>
                         <div
                             class="flex items-center text-orange-dore font-medium group-hover:translate-x-2 transition-transform duration-300">
@@ -1032,7 +1092,7 @@
 
 
     </div>
-    </section>
+
 
 
 
@@ -1058,9 +1118,8 @@
                 </h4>
 
                 <p class="mb-2">
-                    <a href="mailto:                        paellapablo.contact@gmail.com
-" class="hover:text-orange-dore transition">
-                        paellapablo.contact@gmail.com
+                    <a href="mailto:contact@artisanat-culinaire.fr" class="hover:text-orange-dore transition">
+                        contact@artisanat-culinaire.fr
                     </a>
                 </p>
 
@@ -1098,7 +1157,7 @@
             </div>
 
             <div class="border-t border-creme/20 pt-6 text-center text-xs opacity-60">
-                © 2026 Paëlla Pablo — Tous droits réservés
+                © 2024 Paëlla Pablo — Tous droits réservés
             </div>
         </div>
     </footer>
