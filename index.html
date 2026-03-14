@@ -371,6 +371,12 @@
             display: flex;
             width: max-content;
             animation: slide 30s linear infinite;
+            will-change: transform;
+        }
+
+        .image-slider>div {
+            display: flex;
+            gap: 1rem;
         }
 
         @keyframes slide {
@@ -387,14 +393,113 @@
             animation-play-state: paused;
         }
 
+        .image-slider img {
+            transition: transform 0.35s ease, opacity 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        /* ===== MOBILE GALERIE ===== */
         @media (max-width: 768px) {
+            #galerie .gallery-wrapper {
+                height: auto;
+                overflow: visible;
+            }
+
             #galerie .h-96 {
-                height: 260px;
+                height: auto;
+            }
+
+            .image-slider {
+                width: 100%;
+                display: flex;
+                gap: 0.75rem;
+                animation: none !important;
+                overflow-x: auto;
+                overflow-y: visible;
+                scroll-snap-type: x mandatory;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+                padding: 1rem calc(50vw - 110px) 1.5rem;
+                scrollbar-width: none;
+            }
+
+            .image-slider::-webkit-scrollbar {
+                display: none;
+            }
+
+            .image-slider>div {
+                display: contents;
             }
 
             .image-slider img {
-                width: 220px;
-                height: 260px;
+                flex: 0 0 auto;
+                width: 240px;
+                height: 320px;
+                object-fit: cover;
+                border-radius: 18px;
+                scroll-snap-align: center;
+                transform: scale(0.9);
+                opacity: 0.72;
+            }
+
+            .image-slider img.is-active {
+                transform: scale(1.06);
+                opacity: 1;
+                box-shadow: 0 18px 35px rgba(0, 0, 0, 0.28);
+                z-index: 2;
+            }
+
+            .gallery-fade {
+                display: none;
+            }
+
+            .gallery-hint {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.2rem;
+                margin-top: 0.4rem;
+                color: #F5F1E6;
+                opacity: 0.9;
+                user-select: none;
+            }
+
+            .gallery-hint-arrows {
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+                animation: galleryHintMove 1.6s ease-in-out infinite;
+            }
+
+            .gallery-hint svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .gallery-hint span {
+                font-size: 0.78rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+            }
+
+            @keyframes galleryHintMove {
+
+                0%,
+                100% {
+                    transform: translateX(0);
+                    opacity: 0.75;
+                }
+
+                50% {
+                    transform: translateX(6px);
+                    opacity: 1;
+                }
+            }
+        }
+
+        /* desktop : on masque l’indication */
+        @media (min-width: 769px) {
+            .gallery-hint {
+                display: none;
             }
         }
 
@@ -1054,8 +1159,8 @@
 
             </div>
 
-            <div class="relative h-96 overflow-hidden rounded-2xl">
-                <div class="image-slider">
+            <div class="gallery-wrapper relative h-96 overflow-hidden rounded-2xl">
+                <div class="image-slider" id="mobileImageSlider">
                     <div class="flex space-x-4">
                         <img src="photos/retouche.png" alt="Préparation artisanale de paëlla"
                             class="w-80 h-96 object-cover rounded-lg" loading="lazy">
@@ -1075,23 +1180,33 @@
                             class="w-80 h-96 object-cover rounded-lg" loading="lazy">
                         <img src="photos/retouche8.jpg" alt="Ambiance chaleureuse de restaurant"
                             class="w-80 h-96 object-cover rounded-lg" loading="lazy">
-                        <img src="photos/retouche9.jpg" alt="Vue sur cuisine ouverte"
+                        <img src="photos/retouche9.jpeg" alt="Vue sur cuisine ouverte"
                             class="w-80 h-96 object-cover rounded-lg" loading="lazy">
-                        <img src="photos/retouche10.jpg" alt="Desserts artisanaux"
+                        <img src="photos/retouche10.jpeg" alt="Desserts artisanaux"
                             class="w-80 h-96 object-cover rounded-lg" loading="lazy">
-                        <img src="photos/retouche11.jpg" alt="Vin et fromages de la région"
+                        <img src="photos/retouche11.jpeg" alt="Vin et fromages de la région"
                             class="w-80 h-96 object-cover rounded-lg" loading="lazy">
-                        <img src="photos/retouche12.jpg" alt="Terrasse ensoleillée"
-                            class="w-80 h-96 object-cover rounded-lg" loading="lazy">
+
                     </div>
                 </div>
-                <div class="absolute inset-0 bg-gradient-to-r from-noir via-transparent to-noir"></div>
+
+                <div class="gallery-fade absolute inset-0 bg-gradient-to-r from-noir via-transparent to-noir"></div>
             </div>
+
+            <div class="gallery-hint" aria-hidden="true">
+                <div class="gallery-hint-arrows">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </div>
+                <span>Glissez</span>
+            </div>
+
+
         </div>
-    </section>
-
-
-    </div>
 
 
 
@@ -1102,235 +1217,235 @@
 
 
 
-    <!-- Footer -->
-    <footer id="contact" class="bg-noir text-creme py-14">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col items-center mb-10">
-                <img src="photos/poulet.PNG" alt="Paëlla Pablo" class="w-16 h-16 rounded-full mb-3">
-                <p class="text-sm opacity-80 text-center">
-                    Artisanat Culinaire du Sud
-                </p>
-            </div>
+        <!-- Footer -->
+        <footer id="contact" class="bg-noir text-creme py-14">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col items-center mb-10">
+                    <img src="photos/poulet.PNG" alt="Paëlla Pablo" class="w-16 h-16 rounded-full mb-3">
+                    <p class="text-sm opacity-80 text-center">
+                        Artisanat Culinaire du Sud
+                    </p>
+                </div>
 
-            <div class="text-center mb-10">
-                <h4 class="font-serif text-lg mb-4">
-                    Contact
-                </h4>
+                <div class="text-center mb-10">
+                    <h4 class="font-serif text-lg mb-4">
+                        Contact
+                    </h4>
 
-                <p class="mb-2">
-                    <a href="mailto:paellapablo.contact@gmail.com" class="hover:text-orange-dore transition">
-                        paellapablo.contact@gmail.com
+                    <p class="mb-2">
+                        <a href="mailto:contact@artisanat-culinaire.fr" class="hover:text-orange-dore transition">
+                            contact@artisanat-culinaire.fr
+                        </a>
+                    </p>
+
+
+
+                    <div class="flex justify-center space-x-6 mt-6">
+                        <a href="#" aria-label="Facebook" class="hover:text-orange-dore transition">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                            </svg>
+                        </a>
+
+                        <a href="#" aria-label="Instagram" class="hover:text-orange-dore transition">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.343 3.608 1.318.975.975 1.256 2.242 1.318 3.608.058 1.266.07 1.646.07 4.84s-.012 3.574-.07 4.84c-.062 1.366-.343 2.633-1.318 3.608-.975.975-2.242 1.256-3.608 1.318-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.343-3.608-1.318-.975-.975-1.256-2.242-1.318-3.608-.058-1.266-.07-1.646-.07-4.84s.012-3.574.07-4.84c.062-1.366.343-2.633 1.318-3.608.975-.975 2.242-1.256 3.608-1.318 1.266-.058 1.646-.07 4.85-.07z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="text-center text-sm opacity-70 space-y-2 mb-8">
+                    <a href="#traiteur" class="block hover:text-orange-dore transition">
+                        Service Traiteur & Événements
                     </a>
-                </p>
 
-
-
-                <div class="flex justify-center space-x-6 mt-6">
-                    <a href="#" aria-label="Facebook" class="hover:text-orange-dore transition">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path
-                                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                        </svg>
+                    <a href="mentions-legales.html" class="block hover:text-orange-dore transition">
+                        Mentions légales
                     </a>
 
-                    <a href="#" aria-label="Instagram" class="hover:text-orange-dore transition">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path
-                                d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.343 3.608 1.318.975.975 1.256 2.242 1.318 3.608.058 1.266.07 1.646.07 4.84s-.012 3.574-.07 4.84c-.062 1.366-.343 2.633-1.318 3.608-.975.975-2.242 1.256-3.608 1.318-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.343-3.608-1.318-.975-.975-1.256-2.242-1.318-3.608-.058-1.266-.07-1.646-.07-4.84s.012-3.574.07-4.84c.062-1.366.343-2.633 1.318-3.608.975-.975 2.242-1.256 3.608-1.318 1.266-.058 1.646-.07 4.85-.07z" />
-                        </svg>
+                    <a href="politique-confidentialite.html" class="block hover:text-orange-dore transition">
+                        Politique de confidentialité
                     </a>
                 </div>
+
+                <div class="border-t border-creme/20 pt-6 text-center text-xs opacity-60">
+                    © 2024 Paëlla Pablo — Tous droits réservés
+                </div>
             </div>
+        </footer>
 
-            <div class="text-center text-sm opacity-70 space-y-2 mb-8">
-                <a href="#traiteur" class="block hover:text-orange-dore transition">
-                    Service Traiteur & Événements
-                </a>
+        <script>
+            /************************************************************
+             * CONFIG
+             ************************************************************/
+            const FORM_ENDPOINT = "https://formspree.io/f/mbdavvor"; // <-- METS TON LIEN FORMSPREE ICI
 
-                <a href="mentions-legales.html" class="block hover:text-orange-dore transition">
-                    Mentions légales
-                </a>
+            /************************************************************
+             * DATA
+             ************************************************************/
+            const establishments = [
+                {
+                    id: 1,
+                    name: "Paëlla Pablo",
+                    location: "Hérault",
+                    address: "Marchés de Lunel, Mauguio, Sommières, Montpellier",
+                    hours: "Selon les marchés",
+                    phone: "06 13 23 70 82",
+                    menuUrl: "carte/pp-carte.html",
+                },
+                {
+                    id: 2,
+                    name: "Rôtisserie de Sasha",
+                    location: "Baillargues",
+                    address: "Centre-ville",
+                    hours: "Midi & soir",
+                    phone: "06 66 21 79 30",
+                    menuUrl: "carte/carte.html",
+                },
+                {
+                    id: 3,
+                    name: "Pouletterie de Rachel",
+                    location: "Lunel-Viel",
+                    address: "Centre du village",
+                    hours: "Midi & soir",
+                    phone: "06 27 42 30 27",
+                    menuUrl: "carte/carte2.html",
+                },
+            ];
 
-                <a href="politique-confidentialite.html" class="block hover:text-orange-dore transition">
-                    Politique de confidentialité
-                </a>
-            </div>
-
-            <div class="border-t border-creme/20 pt-6 text-center text-xs opacity-60">
-                © 2026 Paëlla Pablo — Tous droits réservés
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        /************************************************************
-         * CONFIG
-         ************************************************************/
-        const FORM_ENDPOINT = "https://formspree.io/f/mbdavvor"; // <-- METS TON LIEN FORMSPREE ICI
-
-        /************************************************************
-         * DATA
-         ************************************************************/
-        const establishments = [
-            {
-                id: 1,
-                name: "Paëlla Pablo",
-                location: "Hérault",
-                address: "Marchés de Lunel, Mauguio, Sommières, Montpellier",
-                hours: "Selon les marchés",
-                phone: "06 13 23 70 82",
-                menuUrl: "carte/pp-carte.html",
-            },
-            {
-                id: 2,
-                name: "Rôtisserie de Sasha",
-                location: "Baillargues",
-                address: "Centre-ville",
-                hours: "Midi & soir",
-                phone: "06 66 21 79 30",
-                menuUrl: "carte/carte.html",
-            },
-            {
-                id: 3,
-                name: "Pouletterie de Rachel",
-                location: "Lunel-Viel",
-                address: "Centre du village",
-                hours: "Midi & soir",
-                phone: "06 27 42 30 27",
-                menuUrl: "carte/carte2.html",
-            },
-        ];
-
-        /************************************************************
-         * HELPERS
-         ************************************************************/
-        function qs(sel, root = document) {
-            return root.querySelector(sel);
-        }
-        function qsa(sel, root = document) {
-            return Array.from(root.querySelectorAll(sel));
-        }
-        function safeAdd(el, event, fn) {
-            if (el) el.addEventListener(event, fn);
-        }
-
-        /************************************************************
-         * UI: HEADER SCROLL (transparent -> solid)
-         ************************************************************/
-        function initHeaderScroll() {
-            const header = qs("#main-header");
-            if (!header) return;
-
-            const onScroll = () => {
-                if (window.scrollY > 80) {
-                    header.classList.add("header-solid");
-                    header.classList.remove("header-transparent");
-                } else {
-                    header.classList.add("header-transparent");
-                    header.classList.remove("header-solid");
-                }
-            };
-
-            window.addEventListener("scroll", onScroll, { passive: true });
-            onScroll(); // état initial
-        }
-
-        /************************************************************
-         * UI: MOBILE MENU
-         ************************************************************/
-        function toggleMobileMenu() {
-            const menu = qs("#mobile-menu");
-            const header = qs("#main-header");
-            if (!menu) return;
-
-            menu.classList.toggle("hidden");
-
-            const open = !menu.classList.contains("hidden");
-            document.body.style.overflow = open ? "hidden" : "";
-            if (header) header.style.pointerEvents = open ? "none" : "";
-        }
-
-        function initMobileMenu() {
-            const btn = qs("#mobile-menu-btn");
-            safeAdd(btn, "click", toggleMobileMenu);
-            // bouton "x" dans ton HTML appelle déjà toggleMobileMenu()
-            window.toggleMobileMenu = toggleMobileMenu;
-        }
-
-        /************************************************************
-         * UI: SCROLL TO SECTION
-         ************************************************************/
-        function scrollToSection(id) {
-            const section = document.getElementById(id);
-            if (section) section.scrollIntoView({ behavior: "smooth" });
-        }
-        window.scrollToSection = scrollToSection;
-
-        /************************************************************
-         * UI: CTA OVERLAY (CHOIX ÉTABLISSEMENT)
-         ************************************************************/
-        function openCtaOverlay() {
-            const overlay = qs("#ctaOverlay");
-            if (!overlay) return;
-            overlay.classList.add("active");
-            document.body.style.overflow = "hidden";
-        }
-        function closeCtaOverlay() {
-            const overlay = qs("#ctaOverlay");
-            if (!overlay) return;
-            overlay.classList.remove("active");
-            document.body.style.overflow = "";
-        }
-        window.openCtaOverlay = openCtaOverlay;
-        window.closeCtaOverlay = closeCtaOverlay;
-
-        function goToEstablishment(id) {
-            closeCtaOverlay();
-
-            // Optionnel : si tu veux scroller vers la carte, ajoute id="card-1" etc sur tes 3 cards
-            const card = document.getElementById(`card-${id}`);
-            if (card) {
-                const offset = 120;
-                const top = card.getBoundingClientRect().top + window.pageYOffset - offset;
-                window.scrollTo({ top, behavior: "smooth" });
-
-                setTimeout(() => handleActivityClick(id), 500);
-            } else {
-                // fallback
-                scrollToSection("activites");
-                setTimeout(() => handleActivityClick(id), 450);
+            /************************************************************
+             * HELPERS
+             ************************************************************/
+            function qs(sel, root = document) {
+                return root.querySelector(sel);
             }
-        }
-        window.goToEstablishment = goToEstablishment;
+            function qsa(sel, root = document) {
+                return Array.from(root.querySelectorAll(sel));
+            }
+            function safeAdd(el, event, fn) {
+                if (el) el.addEventListener(event, fn);
+            }
 
-        function initCtaOverlayCloseBehaviors() {
-            // clic en dehors
-            document.addEventListener("click", (e) => {
-                const overlay = qs("#ctaOverlay");
-                if (!overlay || !overlay.classList.contains("active")) return;
-                if (e.target === overlay) closeCtaOverlay();
-            });
+            /************************************************************
+             * UI: HEADER SCROLL (transparent -> solid)
+             ************************************************************/
+            function initHeaderScroll() {
+                const header = qs("#main-header");
+                if (!header) return;
 
-            // Echap
-            document.addEventListener("keydown", (e) => {
+                const onScroll = () => {
+                    if (window.scrollY > 80) {
+                        header.classList.add("header-solid");
+                        header.classList.remove("header-transparent");
+                    } else {
+                        header.classList.add("header-transparent");
+                        header.classList.remove("header-solid");
+                    }
+                };
+
+                window.addEventListener("scroll", onScroll, { passive: true });
+                onScroll(); // état initial
+            }
+
+            /************************************************************
+             * UI: MOBILE MENU
+             ************************************************************/
+            function toggleMobileMenu() {
+                const menu = qs("#mobile-menu");
+                const header = qs("#main-header");
+                if (!menu) return;
+
+                menu.classList.toggle("hidden");
+
+                const open = !menu.classList.contains("hidden");
+                document.body.style.overflow = open ? "hidden" : "";
+                if (header) header.style.pointerEvents = open ? "none" : "";
+            }
+
+            function initMobileMenu() {
+                const btn = qs("#mobile-menu-btn");
+                safeAdd(btn, "click", toggleMobileMenu);
+                // bouton "x" dans ton HTML appelle déjà toggleMobileMenu()
+                window.toggleMobileMenu = toggleMobileMenu;
+            }
+
+            /************************************************************
+             * UI: SCROLL TO SECTION
+             ************************************************************/
+            function scrollToSection(id) {
+                const section = document.getElementById(id);
+                if (section) section.scrollIntoView({ behavior: "smooth" });
+            }
+            window.scrollToSection = scrollToSection;
+
+            /************************************************************
+             * UI: CTA OVERLAY (CHOIX ÉTABLISSEMENT)
+             ************************************************************/
+            function openCtaOverlay() {
                 const overlay = qs("#ctaOverlay");
                 if (!overlay) return;
-                if (e.key === "Escape" && overlay.classList.contains("active")) closeCtaOverlay();
-            });
-        }
+                overlay.classList.add("active");
+                document.body.style.overflow = "hidden";
+            }
+            function closeCtaOverlay() {
+                const overlay = qs("#ctaOverlay");
+                if (!overlay) return;
+                overlay.classList.remove("active");
+                document.body.style.overflow = "";
+            }
+            window.openCtaOverlay = openCtaOverlay;
+            window.closeCtaOverlay = closeCtaOverlay;
 
-        /************************************************************
-         * UI: ACTIVITY MODAL
-         ************************************************************/
-        function handleActivityClick(id) {
-            const e = establishments.find((x) => x.id === id);
-            if (!e) return;
+            function goToEstablishment(id) {
+                closeCtaOverlay();
 
-            const modal = qs("#activityModal");
-            const content = qs("#modalContent");
-            if (!modal || !content) return;
+                // Optionnel : si tu veux scroller vers la carte, ajoute id="card-1" etc sur tes 3 cards
+                const card = document.getElementById(`card-${id}`);
+                if (card) {
+                    const offset = 120;
+                    const top = card.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({ top, behavior: "smooth" });
 
-            content.innerHTML = `
+                    setTimeout(() => handleActivityClick(id), 500);
+                } else {
+                    // fallback
+                    scrollToSection("activites");
+                    setTimeout(() => handleActivityClick(id), 450);
+                }
+            }
+            window.goToEstablishment = goToEstablishment;
+
+            function initCtaOverlayCloseBehaviors() {
+                // clic en dehors
+                document.addEventListener("click", (e) => {
+                    const overlay = qs("#ctaOverlay");
+                    if (!overlay || !overlay.classList.contains("active")) return;
+                    if (e.target === overlay) closeCtaOverlay();
+                });
+
+                // Echap
+                document.addEventListener("keydown", (e) => {
+                    const overlay = qs("#ctaOverlay");
+                    if (!overlay) return;
+                    if (e.key === "Escape" && overlay.classList.contains("active")) closeCtaOverlay();
+                });
+            }
+
+            /************************************************************
+             * UI: ACTIVITY MODAL
+             ************************************************************/
+            function handleActivityClick(id) {
+                const e = establishments.find((x) => x.id === id);
+                if (!e) return;
+
+                const modal = qs("#activityModal");
+                const content = qs("#modalContent");
+                if (!modal || !content) return;
+
+                content.innerHTML = `
       <div class="flex items-center mb-4">
         <div class="w-12 h-12 bg-orange-dore rounded-full flex items-center justify-center mr-4">
           <span class="text-noir font-serif font-bold text-lg">${e.name.charAt(0)}</span>
@@ -1383,61 +1498,61 @@
       </div>
     `;
 
-            modal.classList.remove("hidden");
-        }
-        window.handleActivityClick = handleActivityClick;
+                modal.classList.remove("hidden");
+            }
+            window.handleActivityClick = handleActivityClick;
 
-        function closeActivityModal() {
-            const modal = qs("#activityModal");
-            if (modal) modal.classList.add("hidden");
-        }
-        window.closeActivityModal = closeActivityModal;
-
-        function initActivityModalCloseBehaviors() {
-            // clic sur fond
-            document.addEventListener("click", (e) => {
+            function closeActivityModal() {
                 const modal = qs("#activityModal");
-                if (!modal) return;
-                if (!modal.classList.contains("hidden") && e.target === modal) closeActivityModal();
-            });
+                if (modal) modal.classList.add("hidden");
+            }
+            window.closeActivityModal = closeActivityModal;
 
-            // Echap
-            document.addEventListener("keydown", (e) => {
-                const modal = qs("#activityModal");
-                if (!modal) return;
-                if (e.key === "Escape" && !modal.classList.contains("hidden")) closeActivityModal();
-            });
-        }
+            function initActivityModalCloseBehaviors() {
+                // clic sur fond
+                document.addEventListener("click", (e) => {
+                    const modal = qs("#activityModal");
+                    if (!modal) return;
+                    if (!modal.classList.contains("hidden") && e.target === modal) closeActivityModal();
+                });
 
-        /************************************************************
-         * RESERVATION (FORM + FORMSPREE)
-         ************************************************************/
-        function openReservationFor(id) {
-            const e = establishments.find((x) => x.id === id);
-            if (!e) return;
-
-            closeActivityModal();
-            handleReservation(e.name);
-        }
-        window.openReservationFor = openReservationFor;
-
-        function closeReservationModal() {
-            const modal = document.getElementById("reservationModal");
-            if (modal) modal.remove();
-            document.body.style.overflow = ""; // au cas où
-        }
-        window.closeReservationModal = closeReservationModal;
-
-        function handleReservation(establishmentName = "") {
-            // sécurité si endpoint pas configuré
-            if (!FORM_ENDPOINT || FORM_ENDPOINT.includes("XXXXYYYY")) {
-                alert("⚠️ Tu dois d’abord mettre ton lien Formspree dans FORM_ENDPOINT.");
-                return;
+                // Echap
+                document.addEventListener("keydown", (e) => {
+                    const modal = qs("#activityModal");
+                    if (!modal) return;
+                    if (e.key === "Escape" && !modal.classList.contains("hidden")) closeActivityModal();
+                });
             }
 
-            document.body.style.overflow = "hidden";
+            /************************************************************
+             * RESERVATION (FORM + FORMSPREE)
+             ************************************************************/
+            function openReservationFor(id) {
+                const e = establishments.find((x) => x.id === id);
+                if (!e) return;
 
-            const modalHtml = `
+                closeActivityModal();
+                handleReservation(e.name);
+            }
+            window.openReservationFor = openReservationFor;
+
+            function closeReservationModal() {
+                const modal = document.getElementById("reservationModal");
+                if (modal) modal.remove();
+                document.body.style.overflow = ""; // au cas où
+            }
+            window.closeReservationModal = closeReservationModal;
+
+            function handleReservation(establishmentName = "") {
+                // sécurité si endpoint pas configuré
+                if (!FORM_ENDPOINT || FORM_ENDPOINT.includes("XXXXYYYY")) {
+                    alert("⚠️ Tu dois d’abord mettre ton lien Formspree dans FORM_ENDPOINT.");
+                    return;
+                }
+
+                document.body.style.overflow = "hidden";
+
+                const modalHtml = `
       <div class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center px-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 relative">
           <button onclick="closeReservationModal()"
@@ -1482,195 +1597,271 @@
       </div>
     `;
 
-            const wrapper = document.createElement("div");
-            wrapper.id = "reservationModal";
-            wrapper.innerHTML = modalHtml;
-            document.body.appendChild(wrapper);
+                const wrapper = document.createElement("div");
+                wrapper.id = "reservationModal";
+                wrapper.innerHTML = modalHtml;
+                document.body.appendChild(wrapper);
 
-            const form = document.getElementById("reservationForm");
-            const successMsg = document.getElementById("reservationSuccess");
-            const errorMsg = document.getElementById("reservationError");
-            const submitBtn = form.querySelector('button[type="submit"]');
+                const form = document.getElementById("reservationForm");
+                const successMsg = document.getElementById("reservationSuccess");
+                const errorMsg = document.getElementById("reservationError");
+                const submitBtn = form.querySelector('button[type="submit"]');
 
-            // fermer si clic dehors
-            wrapper.addEventListener("click", (e) => {
-                if (e.target === wrapper.firstElementChild) closeReservationModal();
-            });
+                // fermer si clic dehors
+                wrapper.addEventListener("click", (e) => {
+                    if (e.target === wrapper.firstElementChild) closeReservationModal();
+                });
 
-            // Echap
-            const onEsc = (e) => {
-                if (e.key === "Escape") {
-                    closeReservationModal();
-                    document.removeEventListener("keydown", onEsc);
+                // Echap
+                const onEsc = (e) => {
+                    if (e.key === "Escape") {
+                        closeReservationModal();
+                        document.removeEventListener("keydown", onEsc);
+                    }
+                };
+                document.addEventListener("keydown", onEsc);
+
+                form.addEventListener("submit", async (ev) => {
+                    ev.preventDefault();
+
+                    successMsg.classList.add("hidden");
+                    errorMsg.classList.add("hidden");
+
+                    submitBtn.disabled = true;
+                    const oldText = submitBtn.textContent;
+                    submitBtn.textContent = "Envoi...";
+
+                    try {
+                        const formData = new FormData(form);
+
+                        const res = await fetch(FORM_ENDPOINT, {
+                            method: "POST",
+                            body: formData,
+                            headers: { Accept: "application/json" },
+                        });
+
+                        if (res.ok) {
+                            form.reset();
+                            successMsg.classList.remove("hidden");
+                            setTimeout(() => closeReservationModal(), 1800);
+                        } else {
+                            errorMsg.classList.remove("hidden");
+                        }
+                    } catch (err) {
+                        errorMsg.classList.remove("hidden");
+                    } finally {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = oldText;
+                    }
+                });
+            }
+            window.handleReservation = handleReservation;
+
+            /************************************************************
+             * CONTACT OVERLAY (WhatsApp / téléphone)
+             ************************************************************/
+            function initContactOverlay() {
+                const contactOverlay = qs("#contactOverlay");
+                const closeBtn = qs(".close-contact");
+
+                // ouvre si clic sur .contact-trigger
+                document.addEventListener("click", (e) => {
+                    const trigger = e.target.closest(".contact-trigger");
+                    if (!trigger) return;
+
+                    e.preventDefault();
+                    if (!contactOverlay) return;
+                    contactOverlay.classList.add("active");
+                    document.body.style.overflow = "hidden";
+                });
+
+                // fermer bouton
+                safeAdd(closeBtn, "click", () => {
+                    if (!contactOverlay) return;
+                    contactOverlay.classList.remove("active");
+                    document.body.style.overflow = "";
+                });
+
+                // fermer clic dehors
+                safeAdd(contactOverlay, "click", (e) => {
+                    if (e.target === contactOverlay) {
+                        contactOverlay.classList.remove("active");
+                        document.body.style.overflow = "";
+                    }
+                });
+
+                // Echap
+                document.addEventListener("keydown", (e) => {
+                    if (!contactOverlay) return;
+                    if (e.key === "Escape" && contactOverlay.classList.contains("active")) {
+                        contactOverlay.classList.remove("active");
+                        document.body.style.overflow = "";
+                    }
+                });
+            }
+
+            /************************************************************
+             * GALERIE SLIDER (pause au touch)
+             ************************************************************/
+            document.addEventListener("DOMContentLoaded", () => {
+                const slider = document.getElementById("mobileImageSlider");
+                if (!slider) return;
+
+                const isMobile = () => window.innerWidth <= 768;
+                let autoScrollInterval = null;
+                let resumeTimeout = null;
+
+                function getImages() {
+                    return Array.from(slider.querySelectorAll("img"));
                 }
-            };
-            document.addEventListener("keydown", onEsc);
 
-            form.addEventListener("submit", async (ev) => {
-                ev.preventDefault();
+                function updateActiveImage() {
+                    if (!isMobile()) {
+                        getImages().forEach(img => img.classList.remove("is-active"));
+                        return;
+                    }
 
-                successMsg.classList.add("hidden");
-                errorMsg.classList.add("hidden");
+                    const sliderCenter = slider.scrollLeft + (slider.offsetWidth / 2);
+                    let closestImg = null;
+                    let closestDistance = Infinity;
 
-                submitBtn.disabled = true;
-                const oldText = submitBtn.textContent;
-                submitBtn.textContent = "Envoi...";
+                    getImages().forEach((img) => {
+                        const imgCenter = img.offsetLeft + (img.offsetWidth / 2);
+                        const distance = Math.abs(sliderCenter - imgCenter);
 
-                try {
-                    const formData = new FormData(form);
-
-                    const res = await fetch(FORM_ENDPOINT, {
-                        method: "POST",
-                        body: formData,
-                        headers: { Accept: "application/json" },
+                        if (distance < closestDistance) {
+                            closestDistance = distance;
+                            closestImg = img;
+                        }
                     });
 
-                    if (res.ok) {
-                        form.reset();
-                        successMsg.classList.remove("hidden");
-                        setTimeout(() => closeReservationModal(), 1800);
-                    } else {
-                        errorMsg.classList.remove("hidden");
+                    getImages().forEach(img => img.classList.remove("is-active"));
+                    if (closestImg) closestImg.classList.add("is-active");
+                }
+
+                function scrollToNextImage() {
+                    if (!isMobile()) return;
+
+                    const maxScroll = slider.scrollWidth / 2;
+
+                    if (slider.scrollLeft >= maxScroll) {
+                        slider.scrollLeft = 0;
                     }
-                } catch (err) {
-                    errorMsg.classList.remove("hidden");
-                } finally {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = oldText;
+
+                    slider.scrollBy({
+                        left: 250,
+                        behavior: "smooth"
+                    });
                 }
-            });
-        }
-        window.handleReservation = handleReservation;
 
-        /************************************************************
-         * CONTACT OVERLAY (WhatsApp / téléphone)
-         ************************************************************/
-        function initContactOverlay() {
-            const contactOverlay = qs("#contactOverlay");
-            const closeBtn = qs(".close-contact");
+                function startAutoScroll() {
+                    stopAutoScroll();
+                    if (!isMobile()) return;
 
-            // ouvre si clic sur .contact-trigger
-            document.addEventListener("click", (e) => {
-                const trigger = e.target.closest(".contact-trigger");
-                if (!trigger) return;
-
-                e.preventDefault();
-                if (!contactOverlay) return;
-                contactOverlay.classList.add("active");
-                document.body.style.overflow = "hidden";
-            });
-
-            // fermer bouton
-            safeAdd(closeBtn, "click", () => {
-                if (!contactOverlay) return;
-                contactOverlay.classList.remove("active");
-                document.body.style.overflow = "";
-            });
-
-            // fermer clic dehors
-            safeAdd(contactOverlay, "click", (e) => {
-                if (e.target === contactOverlay) {
-                    contactOverlay.classList.remove("active");
-                    document.body.style.overflow = "";
+                    autoScrollInterval = setInterval(() => {
+                        scrollToNextImage();
+                    }, 2500);
                 }
-            });
 
-            // Echap
-            document.addEventListener("keydown", (e) => {
-                if (!contactOverlay) return;
-                if (e.key === "Escape" && contactOverlay.classList.contains("active")) {
-                    contactOverlay.classList.remove("active");
-                    document.body.style.overflow = "";
+                function stopAutoScroll() {
+                    if (autoScrollInterval) {
+                        clearInterval(autoScrollInterval);
+                        autoScrollInterval = null;
+                    }
                 }
-            });
-        }
 
-        /************************************************************
-         * GALERIE SLIDER (pause au touch)
-         ************************************************************/
-        function initSliderTouchPause() {
-            const slider = qs(".image-slider");
-            if (!slider) return;
+                function pauseAndResumeAutoScroll() {
+                    stopAutoScroll();
+                    clearTimeout(resumeTimeout);
+                    resumeTimeout = setTimeout(() => {
+                        startAutoScroll();
+                    }, 2200);
+                }
 
-            let isTouching = false;
+                slider.addEventListener("scroll", () => {
+                    updateActiveImage();
+                    pauseAndResumeAutoScroll();
+                }, { passive: true });
 
-            slider.addEventListener("touchstart", () => {
-                isTouching = true;
-                slider.style.animationPlayState = "paused";
-            });
+                slider.addEventListener("touchstart", stopAutoScroll, { passive: true });
+                slider.addEventListener("touchend", pauseAndResumeAutoScroll, { passive: true });
+                slider.addEventListener("mousedown", stopAutoScroll);
+                slider.addEventListener("mouseup", pauseAndResumeAutoScroll);
 
-            slider.addEventListener("touchend", () => {
+                window.addEventListener("resize", () => {
+                    updateActiveImage();
+                    startAutoScroll();
+                });
+
                 setTimeout(() => {
-                    if (!isTouching) return;
-                    slider.style.animationPlayState = "running";
-                    isTouching = false;
-                }, 1500);
+                    updateActiveImage();
+                    startAutoScroll();
+                }, 300);
             });
-        }
 
-        /************************************************************
-         * INIT
-         ************************************************************/
-        document.addEventListener("DOMContentLoaded", () => {
-            initHeaderScroll();
-            initMobileMenu();
-            initCtaOverlayCloseBehaviors();
-            initActivityModalCloseBehaviors();
-            initContactOverlay();
-            initSliderTouchPause();
-        });
-    </script>
+            /************************************************************
+             * INIT
+             ************************************************************/
+            document.addEventListener("DOMContentLoaded", () => {
+                initHeaderScroll();
+                initMobileMenu();
+                initCtaOverlayCloseBehaviors();
+                initActivityModalCloseBehaviors();
+                initContactOverlay();
+                initSliderTouchPause();
+            });
+        </script>
 
-    <!-- POPUP ACTIVITÉ -->
-    <div id="activityModal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center px-4">
-        <div class="bg-creme rounded-2xl max-w-md w-full p-6 relative">
-            <button onclick="closeActivityModal()"
-                class="absolute top-4 right-4 text-2xl text-brun hover:text-orange-dore">
-                &times;
-            </button>
-            <div id="modalContent"></div>
-        </div>
-    </div>
-
-    <!-- Overlay Contact -->
-    <div class="overlay-contact" id="contactOverlay" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
-        <div class="contact-modal">
-            <button class="close-contact" aria-label="Fermer">×</button>
-            <h2 id="contactTitle" class="contact-title">Contacter cet établissement</h2>
-            <div class="contact-buttons">
-                <a href="https://wa.me/3360000002?text=Bonjour%2C%20je%20viens%20de%20voir%20votre%20carte%20en%20ligne%20!"
-                    class="btn-contact btn-whatsapp" target="_blank" rel="noopener">
-                    📱 WhatsApp (06 00 00 02)
-                </a>
-                <a href="tel:+3360000002" class="btn-contact btn-phone">
-                    ☎️ Appeler (06 00 00 02)
-                </a>
+        <!-- POPUP ACTIVITÉ -->
+        <div id="activityModal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center px-4">
+            <div class="bg-creme rounded-2xl max-w-md w-full p-6 relative">
+                <button onclick="closeActivityModal()"
+                    class="absolute top-4 right-4 text-2xl text-brun hover:text-orange-dore">
+                    &times;
+                </button>
+                <div id="modalContent"></div>
             </div>
         </div>
-    </div>
 
-    <!-- Overlay CTA (choix établissement) -->
-    <div id="ctaOverlay" class="cta-overlay" role="dialog" aria-modal="true" aria-labelledby="ctaTitle">
-        <div class="cta-modal">
-            <button class="cta-close" onclick="closeCtaOverlay()" aria-label="Fermer">×</button>
-
-            <h2 id="ctaTitle" class="cta-title">Choisir un établissement</h2>
-
-            <div class="cta-grid">
-                <button class="cta-choice" onclick="goToEstablishment(1)">
-                    🥘 Paëlla Pablo <em>(Evenements, aniverssaires ...)</em>
-                </button>
-
-                <button class="cta-choice" onclick="goToEstablishment(2)">
-                    🔥 Rôtisserie de Sasha <em>(Baillargues)</em>
-                </button>
-
-                <button class="cta-choice" onclick="goToEstablishment(3)">
-                    🍗 Pouletterie de Rachel <em>(Lunel-Viel)</em>
-                </button>
+        <!-- Overlay Contact -->
+        <div class="overlay-contact" id="contactOverlay" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
+            <div class="contact-modal">
+                <button class="close-contact" aria-label="Fermer">×</button>
+                <h2 id="contactTitle" class="contact-title">Contacter cet établissement</h2>
+                <div class="contact-buttons">
+                    <a href="https://wa.me/3360000002?text=Bonjour%2C%20je%20viens%20de%20voir%20votre%20carte%20en%20ligne%20!"
+                        class="btn-contact btn-whatsapp" target="_blank" rel="noopener">
+                        📱 WhatsApp (06 00 00 02)
+                    </a>
+                    <a href="tel:+3360000002" class="btn-contact btn-phone">
+                        ☎️ Appeler (06 00 00 02)
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
+
+        <!-- Overlay CTA (choix établissement) -->
+        <div id="ctaOverlay" class="cta-overlay" role="dialog" aria-modal="true" aria-labelledby="ctaTitle">
+            <div class="cta-modal">
+                <button class="cta-close" onclick="closeCtaOverlay()" aria-label="Fermer">×</button>
+
+                <h2 id="ctaTitle" class="cta-title">Choisir un établissement</h2>
+
+                <div class="cta-grid">
+                    <button class="cta-choice" onclick="goToEstablishment(1)">
+                        🥘 Paëlla Pablo <em>(Evenements, aniverssaires ...)</em>
+                    </button>
+
+                    <button class="cta-choice" onclick="goToEstablishment(2)">
+                        🔥 Rôtisserie de Sasha <em>(Baillargues)</em>
+                    </button>
+
+                    <button class="cta-choice" onclick="goToEstablishment(3)">
+                        🍗 Pouletterie de Rachel <em>(Lunel-Viel)</em>
+                    </button>
+                </div>
+            </div>
+        </div>
 
 </body>
 
