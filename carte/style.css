@@ -306,3 +306,78 @@
     /* ajuste */
     pointer-events: none;
 }
+
+body.page {
+    background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.9)),
+        url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5') center/cover no-repeat;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.panel {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 30px;
+}
+
+.single_menu {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.single_menu:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.single_menu img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-right: 15px;
+}
+
+.menu_content h4 {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.menu_content span {
+    float: right;
+    color: #f1c40f;
+    font-weight: bold;
+}
+
+.nav-tabs .nav-link {
+    color: #aaa;
+    background: transparent;
+    border: none;
+    font-weight: 500;
+}
+
+.nav-tabs .nav-link.active {
+    color: #f1c40f;
+    border-bottom: 2px solid #f1c40f;
+    background: transparent;
+}
+
+.back-site {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: white;
+    text-decoration: none;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.back-site:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
