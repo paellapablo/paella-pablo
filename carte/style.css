@@ -1,0 +1,308 @@
+.page_title {
+    padding: 30px 0px;
+}
+
+.page_title h1 {
+    color: #c0392b;
+    font-weight: 700;
+    line-height: 2;
+    margin-bottom: 0;
+    position: relative;
+    text-transform: capitalize;
+}
+
+.page_title h1::before {
+    background: #c0392b;
+    width: 70px;
+    height: 2px;
+    position: absolute;
+    content: '';
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.page_title h1::after {
+    position: absolute;
+    content: '';
+    background: #fbc531;
+    width: 30px;
+    height: 2px;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/*Menu starts*/
+.menu_tab {
+    margin: 0 auto;
+    justify-content: center;
+}
+
+.nav-item {
+    display: inline-block;
+    text-align: center;
+}
+
+.nav-tabs .nav-link {
+    transition: .3s;
+}
+
+.nav-tabs .nav-link.active {
+    background: #c0392b;
+    color: #fff;
+    font-weight: 700;
+    border: 1px solid #c0392b;
+    text-transform: capitalize;
+}
+
+.nav-link {
+    color: #000;
+}
+
+.nav-tabs .nav-link:hover {
+    background: #c0392b;
+    color: #fff;
+    border: 1px solid #c0392b;
+}
+
+.single_menu {
+    position: relative;
+    margin-bottom: 75px;
+    transition: .3s;
+}
+
+.single_menu:hover img {
+    -webkit-clip-path: polygon(0% 0%, 100% 0, 100% 50%, 100% 100%, 0% 100%);
+    clip-path: polygon(0% 0%, 100% 0, 100% 50%, 100% 100%, 0% 100%);
+
+}
+
+.single_menu img {
+    width: 33%;
+    position: absolute;
+    height: 140px;
+    -webkit-clip-path: polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%);
+    clip-path: polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%);
+    transition: .3s;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.menu_content {
+    padding-left: 200px;
+}
+
+.menu_content h4 {
+    font-size: 25px;
+    font-weight: 300;
+    border-bottom: 1px dashed #c0392b;
+    line-height: 2;
+    text-transform: capitalize;
+}
+
+.menu_content h4 span {
+    font-size: 25px;
+    font-weight: 800;
+    float: right;
+    font-style: italic;
+    color: #c0392b;
+}
+
+.menu_content p {
+    font-weight: 200;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+
+.menu_btn.btn.btn-danger {
+    margin: 0 auto;
+    display: block;
+    width: 140px;
+}
+
+/*Menu ends*/
+.menu_btn.btn.btn-danger {
+    margin: 0 auto;
+    display: block;
+    width: 140px;
+}
+
+.btn.btn-danger {
+    background: #c0392b;
+    border: 1px solid #c0392b;
+    transition: .3s;
+    position: relative;
+    z-index: 1;
+    text-transform: capitalize;
+    font-weight: 700;
+    overflow: hidden;
+    padding: 15px 25px;
+}
+
+.btn.btn-danger::before {
+    position: absolute;
+    content: '';
+    background: #e74c3c;
+    width: 100%;
+    height: 100%;
+    left: -100%;
+    top: 100%;
+    transition: .3s;
+    z-index: -1;
+}
+
+.btn.btn-danger:hover:before {
+    top: 0;
+    left: 0;
+}
+
+/* ========== Responsive amélioré ========== */
+
+/* Tabs: sur mobile, on évite que ça se colle / déborde */
+.menu_tab {
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.nav-tabs .nav-link {
+    padding: .6rem .9rem;
+    white-space: nowrap;
+    border-radius: .35rem;
+}
+
+/* -------- Mobile / petites largeurs -------- */
+@media (max-width: 576px) {
+
+    .page_title {
+        padding: 10px 0;
+    }
+
+    /* Chaque item devient un bloc flex (fini l'absolu) */
+    .single_menu {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 18px;
+        /* beaucoup moins “collé” */
+        padding: 10px 0;
+    }
+
+    .single_menu img {
+        position: static;
+        /* IMPORTANT: on enlève absolute */
+        width: 88px;
+        height: 88px;
+        flex: 0 0 88px;
+        object-fit: cover;
+        border-radius: 10px;
+        /* option: garder la forme, mais souvent mieux sur mobile de simplifier */
+        clip-path: none;
+        -webkit-clip-path: none;
+    }
+
+    .menu_content {
+        padding-left: 0;
+        /* IMPORTANT: on enlève le padding 200px */
+        width: 100%;
+    }
+
+    .menu_content h4 {
+        font-size: 18px;
+        line-height: 1.25;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        /* nom puis prix en dessous */
+        gap: 4px;
+    }
+
+    .menu_content h4 span {
+        float: none;
+        /* IMPORTANT: on enlève le float */
+        font-size: 18px;
+        align-self: flex-start;
+    }
+
+    .menu_content h4 em {
+        font-size: 14px;
+        font-style: normal;
+        opacity: .75;
+    }
+}
+
+/* -------- Tablette: un peu plus confortable -------- */
+@media (min-width: 577px) and (max-width: 991px) {
+
+    .single_menu {
+        margin-bottom: 28px;
+    }
+
+    .single_menu img {
+        height: 120px;
+    }
+
+    .menu_content {
+        padding-left: 160px;
+        /* moins agressif que 200 */
+    }
+
+    .menu_content h4,
+    .menu_content h4 span {
+        font-size: 22px;
+    }
+}
+
+.back-site {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: #c0392b;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    z-index: 1000;
+    transition: 0.3s;
+}
+
+.back-site:hover {
+    background: #a93226;
+    color: white;
+    text-decoration: none;
+}
+
+/* 1) Fond avec image */
+.page {
+    min-height: 100vh;
+    margin: 0;
+    background: url("ton-fond.jpg") center / cover no-repeat fixed;
+    display: grid;
+    place-items: start center;
+    padding: 90px 18px;
+}
+
+/* 2) Le “fond gris clair” (overlay) */
+.panel {
+    background: rgba(255, 255, 255, 0.12);
+    /* très transparent */
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    padding: 35px;
+}
+
+/* optionnel: si tu veux assombrir tout le fond image */
+.page::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.35);
+    /* ajuste */
+    pointer-events: none;
+}
