@@ -1578,7 +1578,17 @@
 
             <input required name="email" type="email" placeholder="Email" class="w-full p-3 border rounded-lg">
 
-            <input required name="date" type="date" class="w-full p-3 border rounded-lg bg-white">
+           <div>
+  <label for="reservation-date" class="block text-sm text-brun/70 mb-2">Date</label>
+  <input
+    required
+    id="reservation-date"
+    name="date"
+    type="date"
+    class="w-full p-3 border rounded-lg bg-white text-brun"
+    style="min-height:56px; font-size:16px;"
+  >
+</div>
 
             <input required name="tel" type="tel" placeholder="Téléphone" pattern="[0-9]{10}" inputmode="numeric"
               class="w-full p-3 border rounded-lg">
